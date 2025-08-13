@@ -1,0 +1,30 @@
+package io.github.monthalcantara.acme.application.service;
+
+import io.github.monthalcantara.acme.domain.model.Solicitacao;
+import io.github.monthalcantara.acme.infra.persistence.repository.SolicitacaoRepository;
+import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class ConsultaSolicitacaoService {
+
+    private final SolicitacaoRepository repository;
+
+    public Solicitacao porId(UUID id) {
+         return repository.findById(id)
+                .map(SolicitacaoMapper::toModel)
+                .orElseThrow(() -> new RuntimeException("Solicitacao não encontrada para o ID informado"));
+    }
+
+    public List<Solicitacao> porClienteId(UUID clienteId) {
+        return repository.findByClienteId(clienteId)
+                .stream()
+                .map(SolicitacaoMapper::toModel)
+                .toList();
+    }
+}
