@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public interface SolicitacaoMapper {
+public class SolicitacaoMapper {
     // Converte SolicitacaoRequest → Solicitacao (domain)
     public static Solicitacao toModel(SolicitacaoRequest dto) {
         if (dto == null) return null;
