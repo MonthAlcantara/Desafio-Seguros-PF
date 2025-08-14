@@ -13,7 +13,7 @@ Você não precisa criar o dashboard manualmente; ele já está pré-configurado
 3.  No menu lateral (canto superior esquerdo), clique em **Dashboards**.
 4.  Selecione o dashboard **"ACME - Dashboard de Observabilidade"** para ver métricas da sua aplicação em tempo real.
 
-![Dashboard do Grafana](docs/images/grafana.png)
+![Dashboard do Grafana](images/grafana.png)
 
 #### **2. Rastreando Requisições com o Zipkin**
 
@@ -23,7 +23,7 @@ O Zipkin permite visualizar o fluxo completo e a latência de uma requisição.
 2.  Clique no botão **"Run Query"** para buscar os traces mais recentes.
 3.  Você verá uma lista de requisições. Clique em uma delas para ver o detalhe do trace, mostrando quanto tempo cada operação (chamadas de API, acesso ao banco de dados) levou.
 
-![Interface do Zipkin](docs/images/Zipkin.png)
+![Interface do Zipkin](images/Zipkin.png)
 
 ### 📚 Usando o Swagger UI (Documentação da API)
 
@@ -36,7 +36,7 @@ O Swagger UI fornece uma interface interativa para explorar e testar os endpoint
 5.  Clique em **"Execute"** para enviar a requisição para a sua aplicação.
 6.  A resposta da API será exibida abaixo, mostrando o `Response body`, `Response headers` e o `cURL` da requisição.
 
-![Interface do Swagger UI](docs/images/swagger-ui-try-it-out.png)
+![Interface do Swagger UI](images/swagger-ui-try-it-out.png)
 
 ### 🕵️‍♂️ Verificando as Chamadas com o WireMock
 

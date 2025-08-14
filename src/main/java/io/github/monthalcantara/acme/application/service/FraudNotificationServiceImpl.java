@@ -33,14 +33,13 @@ public class FraudNotificationServiceImpl implements FraudNotificationService {
     private String fraudApiUrl;
 
     @Override
-    public void notifyAsync(Solicitacao solicitacao) {
-        CompletableFuture.runAsync(() -> {
+    public CompletableFuture<Void> notifyAsync(Solicitacao solicitacao) {
+        return CompletableFuture.runAsync(() -> {
             try {
                 FraudCheckRequest payload = new FraudCheckRequest(solicitacao.getClienteId(), solicitacao.getId());
                 String jsonPayload = objectMapper.writeValueAsString(payload);
 
                 String apiUrlWithScenario = String.format("%s?scenario=%d", fraudApiUrl, new Random().nextInt(4));
-
                 log.info("[Fraude] Enviando requisição para API de fraudes. ID={}. Endpoint: {}", solicitacao.getId(), apiUrlWithScenario);
 
                 HttpRequest request = HttpRequest.newBuilder()

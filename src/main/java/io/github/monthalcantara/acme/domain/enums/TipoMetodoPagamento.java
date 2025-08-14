@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TipoMetodoPagamento {
-    CARTAO_CREDITO("cartao_credito"),
-    DEBITO_CONTA("debito_conta"),
-    BOLETO("boleto"),
-    PIX("pix");
+    CARTAO_CREDITO("CARTAO_CREDITO"),
+    DEBITO_CONTA("DEBITO_CONTA"),
+    BOLETO("BOLETO"),
+    PIX("PIX");
 
     private final String descricao;
     private static final Map<String, TipoMetodoPagamento> DESCRICAO_MAP = new HashMap<>();
@@ -27,10 +27,10 @@ public enum TipoMetodoPagamento {
     }
 
     public static boolean isDescricaoValida(final String descricao) {
-        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toLowerCase());
+        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toUpperCase());
     }
 
     public static TipoMetodoPagamento fromDescricao(final String descricao) {
-        return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toLowerCase());
+        return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toUpperCase());
     }
 }

@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TipoCategoria {
-    VIDA("vida"),
-    AUTO("auto"),
-    RESIDENCIAL("residencial"),
-    EMPRESARIAL("empresarial"),
-    OUTROS("outros");
+    VIDA("VIDA"),
+    AUTO("AUTO"),
+    RESIDENCIAL("RESIDENCIAL"),
+    EMPRESARIAL("EMPRESARIAL"),
+    OUTROS("OUTROS");
 
     private final String descricao;
     private static final Map<String, TipoCategoria> DESCRICAO_MAP = new HashMap<>();
@@ -29,10 +29,10 @@ public enum TipoCategoria {
 
 
     public static boolean isDescricaoValida(final String descricao) {
-        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toLowerCase());
+        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toUpperCase());
     }
 
     public static TipoCategoria fromDescricao(final String descricao) {
-        return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toLowerCase());
+        return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toUpperCase());
     }
 }

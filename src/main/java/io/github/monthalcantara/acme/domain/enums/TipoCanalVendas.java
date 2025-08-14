@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TipoCanalVendas {
-    MOBILE("mobile"),
-    WHATSAPP("whatsapp"),
-    WEB_SITE("web_site");
+    MOBILE("MOBILE"),
+    WHATSAPP("WHATSAPP"),
+    WEB_SITE("WEB_SITE");
 
     private final String descricao;
     private static final Map<String, TipoCanalVendas> DESCRICAO_MAP = new HashMap<>();
@@ -26,11 +26,11 @@ public enum TipoCanalVendas {
     }
 
     public static boolean isDescricaoValida(final String descricao) {
-        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toLowerCase());
+        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toUpperCase());
     }
 
     public static TipoCanalVendas fromDescricao(final String descricao) {
-        return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toLowerCase());
+        return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toUpperCase());
     }
 }
 

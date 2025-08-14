@@ -16,6 +16,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - acme-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
@@ -41,7 +46,8 @@ services:
     networks:
       - acme-network
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy # Garante que o Flyway só iniciará quando o Postgres estiver saudável
 
   wiremock:
     image: wiremock/wiremock:3.2.0

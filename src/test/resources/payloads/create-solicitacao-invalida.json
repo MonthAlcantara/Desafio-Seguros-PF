@@ -1,0 +1,19 @@
+{
+  "customerId": "3b290333-e578-43d9-a796-0f7226500474",
+  "productId": "4a737873-19f6-4d05-ac1a-96e0539f4d7b",
+  "category": "auto",
+  "salesChannel": "mobile",
+  "paymentMethod": "cartao_credito",
+  "totalMonthlyPremiumAmount": -150.75,
+  "insuredAmount": 275000.50,
+  "coverages": {
+    "Roubo": 100000.25,
+    "Perda Total": 10,
+    "Colisão com Terceiros": 75000.00
+  },
+  "assistances": [
+    "Guincho até 250km",
+    "Troca de Óleo",
+    "Chaveiro 24h"
+  ]
+}
