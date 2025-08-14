@@ -6,10 +6,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,6 +32,43 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidacaoNegocioException.class)
     public ResponseEntity<Map<String, Object>> handleBusinessValidation(final ValidacaoNegocioException ex) {
         return ResponseEntity.badRequest().body(Map.of("erros", ex.getErros()));
+    }
+
+    @ExceptionHandler(SolicitacaoNaoEncontradaException.class)
+    public ResponseEntity<ErrorResponse> handleSolicitacaoNaoEncontrada(SolicitacaoNaoEncontradaException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .dataHora(Instant.now())
+                .codigoStatus(HttpStatus.NOT_FOUND.value())
+                .mensagemErro(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StatusNaoPermitidoException.class)
+    public ResponseEntity<ErrorResponse> handleStatusNaoPermitido(StatusNaoPermitidoException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .dataHora(Instant.now())
+                .codigoStatus(HttpStatus.BAD_REQUEST.value())
+                .mensagemErro(ex.getMessage())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String mensagemErro;
+        if (ex.getRequiredType() != null && ex.getRequiredType().equals(UUID.class)) {
+            mensagemErro = "O ID da solicitação '" + ex.getValue() + "' não é um UUID válido.";
+        } else {
+            mensagemErro = "Ocorreu um erro de tipo de argumento: " + ex.getMessage();
+        }
+
+        ErrorResponse error = ErrorResponse.builder()
+                .dataHora(Instant.now())
+                .codigoStatus(HttpStatus.BAD_REQUEST.value())
+                .mensagemErro(mensagemErro)
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

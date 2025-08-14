@@ -1,7 +1,11 @@
 package io.github.monthalcantara.acme.application.service;
 
 import io.github.monthalcantara.acme.domain.enums.TipoStatus;
+import io.github.monthalcantara.acme.domain.model.Solicitacao;
+import io.github.monthalcantara.acme.exception.SolicitacaoNaoEncontradaException;
+import io.github.monthalcantara.acme.exception.StatusNaoPermitidoException;
 import io.github.monthalcantara.acme.infra.fraud.dto.response.FraudCheckResponse;
+import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
 import io.github.monthalcantara.acme.infra.persistence.repository.SolicitacaoRepository;
 import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -31,5 +37,20 @@ public class AtualizaSolicitacaoStatusService {
 
             log.info("[Status] Finalizada a atualização. Solicitação ID: {}, Novo Status: {}", solicitacaoId, novoStatus.getDescricao());
         });
+    }
+
+    public void cancelar(final UUID solicitacaoId) {
+        SolicitacaoEntity solicitacao = solicitacaoRepository.findById(solicitacaoId)
+                .orElseThrow(() -> new SolicitacaoNaoEncontradaException("Solicitação não encontrada: " + solicitacaoId));
+
+        if (solicitacao.getStatus() == TipoStatus.APROVADO || solicitacao.getStatus() == TipoStatus.REJEITADO) {
+            throw new StatusNaoPermitidoException("Não é possível cancelar uma solicitação com status " + solicitacao.getStatus().getDescricao());
+        }
+
+        solicitacao.setStatusComHistorico(TipoStatus.CANCELADA);
+        solicitacao.setFinalizadoEm(Instant.now());
+        solicitacaoRepository.save(solicitacao);
+
+        // TODO: Publicar evento de cancelamento para outros serviços
     }
 }
