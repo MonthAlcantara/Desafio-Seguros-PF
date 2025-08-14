@@ -1,0 +1,253 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-08-14T20:27:08.099Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_0badcfb1e877424e8b592374b6f844fe",
+      "parentId": "fld_a297ae9bb8d3412cb410d6f56c47a07b",
+      "modified": 1755142152997,
+      "created": 1749860230882,
+      "url": "http://localhost:8080/acme/v1/propostas",
+      "name": "Cria Proposta",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"customerId\": \"{% uuid 'v4' %}\",\n  \"productId\": \"{% uuid 'v4' %}\",\n  \"category\": \"auto\",\n  \"salesChannel\": \"mobile\",\n  \"paymentMethod\": \"cartao_credito\",\n  \"totalMonthlyPremiumAmount\": 75.25,\n  \"insuredAmount\": 275000.50,\n  \"coverages\": {\n    \"Roubo\": 100000.25,\n    \"Perda Total\": 10,\n    \"Colisão com Terceiros\": 75000.00\n  },\n  \"assistances\": [\n    \"Guincho até 250km\",\n    \"Troca de Óleo\",\n    \"Chaveiro 24h\"\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_9f697c1ffdc54e86aebd6fa68d6a8ac9"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/2023.5.8",
+          "id": "pair_e6022c386dad4691af1d7d25bf478048"
+        },
+        {
+          "id": "pair_c518a1d329a0455c9e4a8dc688be2cf2",
+          "name": "App-Version",
+          "value": "1.0.0",
+          "description": ""
+        },
+        {
+          "id": "pair_cd93d33e3f304298825b629011b8257a",
+          "name": "x-idempotency-key",
+          "value": "{% uuid 'v4' %}",
+          "description": ""
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1754966748387,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_a297ae9bb8d3412cb410d6f56c47a07b",
+      "parentId": "wrk_58c9453bc1144476ac098397dc991d04",
+      "modified": 1755203122211,
+      "created": 1754966743128,
+      "name": "Seguradora Acme",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1754966743128,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_58c9453bc1144476ac098397dc991d04",
+      "parentId": null,
+      "modified": 1673037954271,
+      "created": 1673037954271,
+      "name": "New Document",
+      "description": "",
+      "scope": "design",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_0ca15e76053e4b98a5d53bf6426f8921",
+      "parentId": "fld_a297ae9bb8d3412cb410d6f56c47a07b",
+      "modified": 1755132276538,
+      "created": 1754966509570,
+      "url": "http://localhost:8080/acme/v1/propostas/{% response 'body', 'req_0badcfb1e877424e8b592374b6f844fe', 'b64::JC5pZA==::46b', 'never', 60 %}",
+      "name": "Recupera Proposta Pelo Id",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "X-Idempotency-Key",
+          "value": "123e4567-e89b-12d3-a456-426614174000",
+          "id": "pair_970940a7e5da4f69bbdec0112c3fca7a",
+          "disabled": true
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1754966748287,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_e56fe367739a4e45acbd5326acdd136b",
+      "parentId": "fld_a297ae9bb8d3412cb410d6f56c47a07b",
+      "modified": 1755142073465,
+      "created": 1755141904832,
+      "url": "http://localhost:8080/acme/v1/propostas/{% response 'body', 'req_0badcfb1e877424e8b592374b6f844fe', 'b64::JC5pZA==::46b', 'never', 60 %}/cancelar",
+      "name": "Cancela Proposta Pelo Id",
+      "description": "",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "X-Idempotency-Key",
+          "value": "123e4567-e89b-12d3-a456-426614174000",
+          "id": "pair_970940a7e5da4f69bbdec0112c3fca7a",
+          "disabled": true
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1754966748237,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_841f94bc46d54dc29857fe8b5cd3a72a",
+      "parentId": "fld_a297ae9bb8d3412cb410d6f56c47a07b",
+      "modified": 1755132227192,
+      "created": 1754966617856,
+      "url": "http://localhost:8081/acme/v1/propostas/cliente/{% response 'body', 'req_0ca15e76053e4b98a5d53bf6426f8921', 'b64::JC5jdXN0b21lcl9pZA==::46b', 'never', 60 %}",
+      "name": "Recupera Proposta Pelo Id do Cliente",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "X-Idempotency-Key",
+          "value": "123e4567-e89b-12d3-a456-426614174000",
+          "id": "pair_970940a7e5da4f69bbdec0112c3fca7a",
+          "disabled": true
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1754966748187,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_597908b045160de2203b956d7446facb0628b8cb",
+      "parentId": "wrk_58c9453bc1144476ac098397dc991d04",
+      "modified": 1676930061563,
+      "created": 1673037954285,
+      "name": "Base Environment",
+      "data": {
+        "hostpath": "http://localhost:8080"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "hostpath"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1673037954285,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_597908b045160de2203b956d7446facb0628b8cb",
+      "parentId": "wrk_58c9453bc1144476ac098397dc991d04",
+      "modified": 1754966568928,
+      "created": 1673037954290,
+      "name": "Default Jar",
+      "cookies": [
+        {
+          "key": "JSESSIONID",
+          "value": "BF96F4365A49A09A4D69AE25560B6D9F",
+          "domain": "localhost",
+          "path": "/",
+          "httpOnly": true,
+          "hostOnly": true,
+          "creation": "2023-02-21T20:58:32.560Z",
+          "lastAccessed": "2023-02-21T20:58:32.560Z",
+          "id": "7012777466579558"
+        },
+        {
+          "key": "pga4_session",
+          "value": "df4b59cb-b9a8-4847-8a76-cb5beb2ce635!FZme8TRNd49V5EbMms8XcLMmxYCLarLx0831SyvvH0I=",
+          "expires": "2025-08-13T02:42:48.000Z",
+          "domain": "localhost",
+          "path": "/",
+          "httpOnly": true,
+          "hostOnly": true,
+          "creation": "2025-08-12T02:42:48.923Z",
+          "lastAccessed": "2025-08-12T02:42:48.923Z",
+          "sameSite": "lax",
+          "id": "21175366025920428"
+        }
+      ],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_5c69761938ba4afb9f2018bc9229beed",
+      "parentId": "wrk_58c9453bc1144476ac098397dc991d04",
+      "modified": 1755147834682,
+      "created": 1673037954273,
+      "fileName": "New Document",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    },
+    {
+      "_id": "uts_02f32bd72cde4b1a87e127de570241ee",
+      "parentId": "wrk_58c9453bc1144476ac098397dc991d04",
+      "modified": 1673037954306,
+      "created": 1673037954306,
+      "name": "Example Test Suite",
+      "_type": "unit_test_suite"
+    },
+    {
+      "_id": "env_c8e5d32f643b4b0dae8b4a0066805620",
+      "parentId": "env_597908b045160de2203b956d7446facb0628b8cb",
+      "modified": 1676930110795,
+      "created": 1676930110795,
+      "name": "New Environment",
+      "data": {},
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1676930110795,
+      "_type": "environment"
+    }
+  ]
+}
