@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
 
   postgres:
@@ -42,7 +44,7 @@ services:
       - postgres
 
   wiremock:
-    image: wiremock/wiremock:2.35.0
+    image: wiremock/wiremock:3.2.0
     container_name: acme-wiremock
     command: --global-response-templating
     ports:
@@ -52,8 +54,53 @@ services:
     networks:
       - acme-network
 
+#  acme:
+#    build: . # Construa a imagem a partir do Dockerfile na raiz do projeto
+#    container_name: acme-application
+#    restart: unless-stopped
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      # Exemplo de como passar variáveis de ambiente
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/acme
+#      SPRING_DATASOURCE_USERNAME: acme_user
+#      SPRING_DATASOURCE_PASSWORD: acme_pass
+#    networks:
+#      - acme-network
+#    depends_on:
+#      - postgres
+#      - wiremock
+#      - prometheus
+
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: acme-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+    restart: unless-stopped
+    networks:
+      - acme-network
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    container_name: acme-grafana
+    ports:
+      - '3000:3000'
+    networks:
+      - acme-network
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
 volumes:
-  postgres_data:
+   postgres_data:
+   grafana_data:
 
 networks:
   acme-network:
