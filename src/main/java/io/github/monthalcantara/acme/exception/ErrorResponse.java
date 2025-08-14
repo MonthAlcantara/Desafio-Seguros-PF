@@ -1,11 +1,9 @@
 package io.github.monthalcantara.acme.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
 import java.time.Instant;
 
-@Data
 public class ErrorResponse {
 
     @JsonProperty("timestamp")
@@ -17,7 +15,7 @@ public class ErrorResponse {
     @JsonProperty("error")
     private String mensagemErro;
 
-    public ErrorResponse(Instant dataHora, int codigoStatus, String mensagemErro) {
+    public ErrorResponse(final Instant dataHora, final int codigoStatus, final String mensagemErro) {
         this.dataHora = dataHora;
         this.codigoStatus = codigoStatus;
         this.mensagemErro = mensagemErro;

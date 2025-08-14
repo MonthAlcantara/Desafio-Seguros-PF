@@ -15,12 +15,12 @@ public enum TipoStatus {
     private static final Map<String, TipoStatus> DESCRICAO_MAP = new HashMap<>();
 
     static {
-        for (TipoStatus tipoStatus : TipoStatus.values()) {
+        for (final TipoStatus tipoStatus : TipoStatus.values()) {
             DESCRICAO_MAP.put(tipoStatus.descricao, tipoStatus);
         }
     }
 
-    TipoStatus(String descricao) {
+    TipoStatus(final String descricao) {
         this.descricao = descricao;
     }
 
@@ -28,11 +28,11 @@ public enum TipoStatus {
         return descricao;
     }
 
-    public static boolean isDescricaoValida(String descricao) {
+    public static boolean isDescricaoValida(final String descricao) {
         return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toLowerCase());
     }
 
-    public static TipoStatus fromDescricao(String descricao) {
+    public static TipoStatus fromDescricao(final String descricao) {
         return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toLowerCase());
     }
 }

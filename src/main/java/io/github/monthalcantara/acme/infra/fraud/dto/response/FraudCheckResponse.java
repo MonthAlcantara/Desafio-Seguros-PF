@@ -2,6 +2,7 @@ package io.github.monthalcantara.acme.infra.fraud.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

@@ -1,6 +1,9 @@
 package io.github.monthalcantara.acme.domain.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -9,13 +12,5 @@ import lombok.*;
 public class Assistencia {
 
     private String descricao;
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
 
 }

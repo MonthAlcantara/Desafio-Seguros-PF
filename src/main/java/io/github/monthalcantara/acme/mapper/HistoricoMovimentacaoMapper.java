@@ -4,15 +4,16 @@ import io.github.monthalcantara.acme.api.dto.response.HistoricoMovimentacaoRespo
 import io.github.monthalcantara.acme.domain.model.HistoricoMovimentacao;
 import io.github.monthalcantara.acme.infra.persistence.entity.HistoricoMovimentacaoEntity;
 import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
-import java.util.Collections;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class HistoricoMovimentacaoMapper {
 
     // Entity → Domain
-    public static HistoricoMovimentacao toDomain(HistoricoMovimentacaoEntity entity) {
+    public static HistoricoMovimentacao toDomain(final HistoricoMovimentacaoEntity entity) {
         if (entity == null) return null;
 
         return HistoricoMovimentacao.builder()
@@ -22,18 +23,18 @@ public class HistoricoMovimentacaoMapper {
     }
 
     // Domain → Entity
-    public static HistoricoMovimentacaoEntity toEntity(HistoricoMovimentacao domain, SolicitacaoEntity solicitacaoEntity) {
+    public static HistoricoMovimentacaoEntity toEntity(final HistoricoMovimentacao domain, final SolicitacaoEntity solicitacaoEntity) {
         if (domain == null) return null;
 
         return HistoricoMovimentacaoEntity.builder()
                 .status(domain.getStatus())
                 .dataMovimentacao(domain.getDataMovimentacao())
-                .solicitacao(solicitacaoEntity) // obrigatório setar o relacionamento
+                .solicitacao(solicitacaoEntity)
                 .build();
     }
 
     // Domain → DTO Response
-    public static HistoricoMovimentacaoResponse toResponse(HistoricoMovimentacao domain) {
+    public static HistoricoMovimentacaoResponse toResponse(final HistoricoMovimentacao domain) {
         if (domain == null) return null;
 
         return HistoricoMovimentacaoResponse.builder()
@@ -43,25 +44,26 @@ public class HistoricoMovimentacaoMapper {
     }
 
     // List<Entity> → List<Domain>
-    public static List<HistoricoMovimentacao> toDomainList(List<HistoricoMovimentacaoEntity> entities) {
+    public static List<HistoricoMovimentacao> toDomainList(final List<HistoricoMovimentacaoEntity> entities) {
         if (entities == null) return Collections.emptyList();
         return entities.stream()
                 .map(HistoricoMovimentacaoMapper::toDomain)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     // List<Domain> → List<DTO>
-    public static List<HistoricoMovimentacaoEntity> toEntityList(List<HistoricoMovimentacao> domains, SolicitacaoEntity solicitacaoEntity) {
+    public static List<HistoricoMovimentacaoEntity> toEntityList(final List<HistoricoMovimentacao> domains, final SolicitacaoEntity solicitacaoEntity) {
         if (domains == null) return Collections.emptyList();
         return domains.stream()
                 .map(h -> HistoricoMovimentacaoMapper.toEntity(h, solicitacaoEntity))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
+
     // List<Domain> → List<DTO>
-    public static List<HistoricoMovimentacaoResponse> toResponseList(List<HistoricoMovimentacao> domains) {
+    public static List<HistoricoMovimentacaoResponse> toResponseList(final List<HistoricoMovimentacao> domains) {
         if (domains == null) return Collections.emptyList();
         return domains.stream()
                 .map(HistoricoMovimentacaoMapper::toResponse)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 }

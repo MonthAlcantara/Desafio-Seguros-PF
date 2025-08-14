@@ -22,11 +22,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SolicitacaoMapper {
-    // Converte SolicitacaoRequest → Solicitacao (domain)
-    public static Solicitacao toModel(SolicitacaoRequest dto) {
+
+    public static Solicitacao toModel(final SolicitacaoRequest dto) {
         if (dto == null) return null;
 
-        Solicitacao solicitacao = new Solicitacao();
+        final var solicitacao = new Solicitacao();
         solicitacao.setClienteId(dto.getClienteId());
         solicitacao.setProdutoId(dto.getProdutoId());
         solicitacao.setCategoria(dto.getCategoria());
@@ -34,13 +34,15 @@ public class SolicitacaoMapper {
         solicitacao.setMetodoPagamento(dto.getMetodoPagamento());
         solicitacao.setTotalPremioMensal(dto.getTotalPremioMensal());
         solicitacao.setValorSegurado(dto.getValorSegurado());
-        solicitacao.setHistoricoMovimentacoes(List.of(HistoricoMovimentacao.builder().dataMovimentacao(Instant.now()).status(TipoStatus.RECEBIDO.getDescricao()).build()));
+        solicitacao.setHistoricoMovimentacoes(List.of(HistoricoMovimentacao.builder()
+                .dataMovimentacao(Instant.now())
+                .status(TipoStatus.RECEBIDO.getDescricao())
+                .build()));
 
-        // Map<String, BigDecimal> → List<Cobertura>
         if (dto.getCoberturas() != null) {
-            List<Cobertura> coberturas = dto.getCoberturas().entrySet().stream()
+            final var coberturas = dto.getCoberturas().entrySet().stream()
                     .map(e -> {
-                        Cobertura c = new Cobertura();
+                        final var c = new Cobertura();
                         c.setNome(e.getKey());
                         c.setValor(e.getValue());
                         return c;
@@ -48,11 +50,10 @@ public class SolicitacaoMapper {
             solicitacao.setCoberturas(coberturas);
         }
 
-        // List<String> → List<Assistencia>
         if (dto.getAssistencias() != null) {
-            List<Assistencia> assistencias = dto.getAssistencias().stream()
+            final var assistencias = dto.getAssistencias().stream()
                     .map(desc -> {
-                        Assistencia a = new Assistencia();
+                        final var a = new Assistencia();
                         a.setDescricao(desc);
                         return a;
                     }).collect(Collectors.toList());
@@ -62,11 +63,10 @@ public class SolicitacaoMapper {
         return solicitacao;
     }
 
-    // Converte Solicitacao (domain) → SolicitacaoResponse (DTO)
-    public static SolicitacaoResponse toDto(Solicitacao model) {
+    public static SolicitacaoResponse toDto(final Solicitacao model) {
         if (model == null) return null;
 
-        SolicitacaoResponse response = new SolicitacaoResponse();
+        final var response = new SolicitacaoResponse();
         response.setId(model.getId());
         response.setClienteId(model.getClienteId());
         response.setProdutoId(model.getProdutoId());
@@ -80,16 +80,14 @@ public class SolicitacaoMapper {
         response.setValorSegurado(model.getValorSegurado());
         model.getHistoricoMovimentacoes().forEach(h -> response.getHistoricoMovimentacoes().add(HistoricoMovimentacaoMapper.toResponse(h)));
 
-        // List<Cobertura> → Map<String, BigDecimal>
         if (model.getCoberturas() != null) {
-            Map<String, BigDecimal> mapCoberturas = model.getCoberturas().stream()
+            final var mapCoberturas = model.getCoberturas().stream()
                     .collect(Collectors.toMap(Cobertura::getNome, Cobertura::getValor));
             response.setCoberturas(mapCoberturas);
         }
 
-        // List<Assistencia> → List<String>
         if (model.getAssistencias() != null) {
-            List<String> assistencias = model.getAssistencias().stream()
+            final var assistencias = model.getAssistencias().stream()
                     .map(Assistencia::getDescricao)
                     .collect(Collectors.toList());
             response.setAssistencias(assistencias);
@@ -98,10 +96,8 @@ public class SolicitacaoMapper {
         return response;
     }
 
-    public static SolicitacaoResponse toResponse(Solicitacao model) {
-        if (model == null) {
-            return null;
-        }
+    public static SolicitacaoResponse toResponse(final Solicitacao model) {
+        if (model == null) return null;
 
         return SolicitacaoResponse.builder()
                 .id(model.getId())
@@ -121,20 +117,20 @@ public class SolicitacaoMapper {
                 .build();
     }
 
-    private static Map<String, BigDecimal> mapCoberturas(List<Cobertura> coberturas) {
+    private static Map<String, BigDecimal> mapCoberturas(final List<Cobertura> coberturas) {
         return coberturas == null ? Map.of() :
                 coberturas.stream()
                         .collect(Collectors.toMap(Cobertura::getNome, Cobertura::getValor));
     }
 
-    private static List<String> mapAssistencias(List<Assistencia> assistencias) {
+    private static List<String> mapAssistencias(final List<Assistencia> assistencias) {
         return assistencias == null ? List.of() :
                 assistencias.stream()
                         .map(Assistencia::getDescricao)
                         .toList();
     }
 
-    private static List<HistoricoMovimentacaoResponse> mapHistorico(List<HistoricoMovimentacao> historico) {
+    private static List<HistoricoMovimentacaoResponse> mapHistorico(final List<HistoricoMovimentacao> historico) {
         return historico == null ? List.of() :
                 historico.stream()
                         .map(h -> HistoricoMovimentacaoResponse.builder()
@@ -144,17 +140,14 @@ public class SolicitacaoMapper {
                         .toList();
     }
 
-    public static List<SolicitacaoResponse> toResponseList(List<Solicitacao> models) {
-        if (models == null) {
-            return null;
-        }
+    public static List<SolicitacaoResponse> toResponseList(final List<Solicitacao> models) {
+        if (models == null) return null;
         return models.stream()
                 .map(SolicitacaoMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    // Converte Solicitacao (domain) → SolicitacaoResponse (DTO)
-    public static SolicitacaoCriadaResponse toResponseDto(Solicitacao model) {
+    public static SolicitacaoCriadaResponse toResponseDto(final Solicitacao model) {
         if (model == null) return null;
 
         return new SolicitacaoCriadaResponse(
@@ -163,11 +156,10 @@ public class SolicitacaoMapper {
         );
     }
 
-    // Converte Solicitacao (domain) → SolicitacaoEntity
-    public static SolicitacaoEntity toEntity(Solicitacao model) {
+    public static SolicitacaoEntity toEntity(final Solicitacao model) {
         if (model == null) return null;
 
-        SolicitacaoEntity entity = new SolicitacaoEntity();
+        final var entity = new SolicitacaoEntity();
         entity.setId(model.getId());
         entity.setClienteId(model.getClienteId());
         entity.setProdutoId(model.getProdutoId());
@@ -182,12 +174,10 @@ public class SolicitacaoMapper {
         entity.setChaveIdempotencia(model.getChaveIdempotencia());
         entity.setHistoricoMovimentacoes(HistoricoMovimentacaoMapper.toEntityList(model.getHistoricoMovimentacoes(), entity));
 
-
-        // Map Coberturas domain → entity e seta solicitacaoEntity no relacionamento
         if (model.getCoberturas() != null) {
-            List<CoberturaEntity> coberturaEntities = model.getCoberturas().stream()
+            final var coberturaEntities = model.getCoberturas().stream()
                     .map(cob -> {
-                        CoberturaEntity entidade = new CoberturaEntity();
+                        final var entidade = new CoberturaEntity();
                         entidade.setNome(cob.getNome());
                         entidade.setValor(cob.getValor());
                         entidade.setSolicitacaoEntity(entity);
@@ -198,11 +188,10 @@ public class SolicitacaoMapper {
             entity.setCoberturaEntities(Collections.emptyList());
         }
 
-        // Map Assistencias domain → entity e seta solicitacaoEntity no relacionamento
         if (model.getAssistencias() != null) {
-            List<AssistenciaEntity> assistenciaEntities = model.getAssistencias().stream()
+            final var assistenciaEntities = model.getAssistencias().stream()
                     .map(ass -> {
-                        AssistenciaEntity entidade = new AssistenciaEntity();
+                        final var entidade = new AssistenciaEntity();
                         entidade.setDescricao(ass.getDescricao());
                         entidade.setSolicitacaoEntity(entity);
                         return entidade;
@@ -215,11 +204,10 @@ public class SolicitacaoMapper {
         return entity;
     }
 
-    // Converte SolicitacaoEntity → Solicitacao (domain)
-    public static Solicitacao toModel(SolicitacaoEntity entity) {
+    public static Solicitacao toModel(final SolicitacaoEntity entity) {
         if (entity == null) return null;
 
-        Solicitacao model = new Solicitacao();
+        final var model = new Solicitacao();
         model.setId(entity.getId());
         model.setClienteId(entity.getClienteId());
         model.setProdutoId(entity.getProdutoId());
@@ -234,12 +222,10 @@ public class SolicitacaoMapper {
         model.setChaveIdempotencia(entity.getChaveIdempotencia());
         model.setHistoricoMovimentacoes(HistoricoMovimentacaoMapper.toDomainList(entity.getHistoricoMovimentacoes()));
 
-
-        // List<CoberturaEntity> → List<Cobertura>
         if (entity.getCoberturaEntities() != null) {
-            List<Cobertura> coberturas = entity.getCoberturaEntities().stream()
+            final var coberturas = entity.getCoberturaEntities().stream()
                     .map(ent -> {
-                        Cobertura c = new Cobertura();
+                        final var c = new Cobertura();
                         c.setNome(ent.getNome());
                         c.setValor(ent.getValor());
                         return c;
@@ -247,11 +233,10 @@ public class SolicitacaoMapper {
             model.setCoberturas(coberturas);
         }
 
-        // List<AssistenciaEntity> → List<Assistencia>
         if (entity.getAssistenciaEntities() != null) {
-            List<Assistencia> assistencias = entity.getAssistenciaEntities().stream()
+            final var assistencias = entity.getAssistenciaEntities().stream()
                     .map(ent -> {
-                        Assistencia a = new Assistencia();
+                        final var a = new Assistencia();
                         a.setDescricao(ent.getDescricao());
                         return a;
                     }).collect(Collectors.toList());
@@ -261,36 +246,35 @@ public class SolicitacaoMapper {
         return model;
     }
 
-    // Métodos para converter entre String e seus enums na entity (implemente conforme seus enums)
-    private static TipoCategoria convertStringToCategoriaEnum(String categoria) {
-        return TipoCategoria.fromDescricao(categoria); // modificar para seu enum
+    private static TipoCategoria convertStringToCategoriaEnum(final String categoria) {
+        return TipoCategoria.fromDescricao(categoria);
     }
 
-    private static TipoCanalVendas convertStringToCanalVendaEnum(String canalVenda) {
-        return TipoCanalVendas.fromDescricao(canalVenda); // modificar para seu enum
+    private static TipoCanalVendas convertStringToCanalVendaEnum(final String canalVenda) {
+        return TipoCanalVendas.fromDescricao(canalVenda);
     }
 
-    private static TipoMetodoPagamento convertStringToMetodoPagamentoEnum(String metodoPagamento) {
-        return TipoMetodoPagamento.fromDescricao(metodoPagamento); // modificar para seu enum
+    private static TipoMetodoPagamento convertStringToMetodoPagamentoEnum(final String metodoPagamento) {
+        return TipoMetodoPagamento.fromDescricao(metodoPagamento);
     }
 
-    private static TipoStatus convertStringToStatusEnum(String status) {
-        return TipoStatus.fromDescricao(status); // modificar para seu enum
+    private static TipoStatus convertStringToStatusEnum(final String status) {
+        return TipoStatus.fromDescricao(status);
     }
 
-    private static String convertCategoriaEnumToString(Object categoriaEnum) {
+    private static String convertCategoriaEnumToString(final Object categoriaEnum) {
         return categoriaEnum == null ? null : categoriaEnum.toString();
     }
 
-    private static String convertCanalVendaEnumToString(Object canalVendaEnum) {
+    private static String convertCanalVendaEnumToString(final Object canalVendaEnum) {
         return canalVendaEnum == null ? null : canalVendaEnum.toString();
     }
 
-    private static String convertMetodoPagamentoEnumToString(Object metodoPagamentoEnum) {
+    private static String convertMetodoPagamentoEnumToString(final Object metodoPagamentoEnum) {
         return metodoPagamentoEnum == null ? null : metodoPagamentoEnum.toString();
     }
 
-    private static String convertStatusEnumToString(Object statusEnum) {
+    private static String convertStatusEnumToString(final Object statusEnum) {
         return statusEnum == null ? null : statusEnum.toString();
     }
 }

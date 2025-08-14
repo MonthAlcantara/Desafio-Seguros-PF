@@ -9,7 +9,10 @@ import io.github.monthalcantara.acme.infra.persistence.converter.TipoCategoriaCo
 import io.github.monthalcantara.acme.infra.persistence.converter.TipoFormaPagamentoConverter;
 import io.github.monthalcantara.acme.infra.persistence.converter.TipoStatusConverter;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -96,11 +99,12 @@ public class SolicitacaoEntity {
                 .build();
         historicoMovimentacoes.add(h);
     }
-    // Método para alterar status e criar histórico automaticamente
+
     public void setStatusComHistorico(TipoStatus novoStatus) {
         this.status = novoStatus;
         addHistorico(novoStatus.getDescricao(), Instant.now());
     }
+
     public void vincularRelacionamentos() {
         getCoberturaEntities().forEach(cobertura -> cobertura.setSolicitacaoEntity(this));
         getAssistenciaEntities().forEach(assistencia -> assistencia.setSolicitacaoEntity(this));
@@ -112,6 +116,7 @@ public class SolicitacaoEntity {
     public List<HistoricoMovimentacaoEntity> getHistoricoMovimentacoes() {
         return historicoMovimentacoes == null ? Collections.emptyList() : historicoMovimentacoes;
     }
+
     public List<CoberturaEntity> getCoberturaEntities() {
         return coberturaEntities == null ? Collections.emptyList() : coberturaEntities;
     }

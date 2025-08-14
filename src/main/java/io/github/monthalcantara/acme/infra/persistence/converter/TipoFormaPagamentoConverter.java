@@ -8,12 +8,12 @@ import jakarta.persistence.Converter;
 public class TipoFormaPagamentoConverter implements AttributeConverter<TipoMetodoPagamento, String> {
 
     @Override
-    public String convertToDatabaseColumn(TipoMetodoPagamento attribute) {
+    public String convertToDatabaseColumn(final TipoMetodoPagamento attribute) {
         return attribute != null ? attribute.getDescricao().toUpperCase() : null;
     }
 
     @Override
-    public TipoMetodoPagamento convertToEntityAttribute(String dbData) {
+    public TipoMetodoPagamento convertToEntityAttribute(final String dbData) {
         return dbData != null ? TipoMetodoPagamento.fromDescricao(dbData) : null;
     }
 }

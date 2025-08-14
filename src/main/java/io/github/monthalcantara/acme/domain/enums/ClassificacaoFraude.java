@@ -3,6 +3,7 @@ package io.github.monthalcantara.acme.domain.enums;
 import lombok.Getter;
 
 import java.util.Arrays;
+
 @Getter
 public enum ClassificacaoFraude {
     HIGH_RISK("HIGH_RISK", TipoStatus.REJEITADO),

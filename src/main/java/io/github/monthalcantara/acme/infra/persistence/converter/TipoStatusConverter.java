@@ -8,12 +8,12 @@ import jakarta.persistence.Converter;
 public class TipoStatusConverter implements AttributeConverter<TipoStatus, String> {
 
     @Override
-    public String convertToDatabaseColumn(TipoStatus attribute) {
+    public String convertToDatabaseColumn(final TipoStatus attribute) {
         return attribute != null ? attribute.getDescricao().toUpperCase() : null;
     }
 
     @Override
-    public TipoStatus convertToEntityAttribute(String dbData) {
+    public TipoStatus convertToEntityAttribute(final String dbData) {
         return dbData != null ? TipoStatus.fromDescricao(dbData) : null;
     }
 }

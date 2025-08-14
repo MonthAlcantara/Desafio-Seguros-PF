@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SolicitacaoRepository extends JpaRepository<SolicitacaoEntity, UUID> {
-    Optional<SolicitacaoEntity> findByChaveIdempotencia(String chaveIdempotencia);
+    Optional<SolicitacaoEntity> findByChaveIdempotencia(final String chaveIdempotencia);
 
-    // retornar LIST para consultas por cliente
-    List<SolicitacaoEntity> findByClienteId(UUID clienteId);
+    List<SolicitacaoEntity> findByClienteId(final UUID clienteId);
 }

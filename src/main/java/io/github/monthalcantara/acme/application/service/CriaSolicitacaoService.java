@@ -4,23 +4,26 @@ import io.github.monthalcantara.acme.domain.model.Solicitacao;
 import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
 import io.github.monthalcantara.acme.infra.persistence.repository.SolicitacaoRepository;
 import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CriaSolicitacaoService {
 
     private final SolicitacaoRepository repository;
     private final FraudNotificationService fraudNotificationService;
 
+    public CriaSolicitacaoService(final SolicitacaoRepository repository, final FraudNotificationService fraudNotificationService) {
+        this.repository = repository;
+        this.fraudNotificationService = fraudNotificationService;
+    }
+
     @Transactional
     public Solicitacao criar(final Solicitacao solicitacao, final String chaveIdempotencia) {
         log.info("[Solicitacao] Início da criação. chaveIdempotencia={}", chaveIdempotencia);
-        Solicitacao result = repository.findByChaveIdempotencia(chaveIdempotencia)
+        final var result = repository.findByChaveIdempotencia(chaveIdempotencia)
                 .map(SolicitacaoMapper::toModel)
                 .orElseGet(() -> criarNova(solicitacao, chaveIdempotencia));
 

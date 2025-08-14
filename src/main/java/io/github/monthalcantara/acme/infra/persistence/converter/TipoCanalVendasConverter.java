@@ -8,12 +8,12 @@ import jakarta.persistence.Converter;
 public class TipoCanalVendasConverter implements AttributeConverter<TipoCanalVendas, String> {
 
     @Override
-    public String convertToDatabaseColumn(TipoCanalVendas attribute) {
+    public String convertToDatabaseColumn(final TipoCanalVendas attribute) {
         return attribute != null ? attribute.getDescricao().toUpperCase() : null;
     }
 
     @Override
-    public TipoCanalVendas convertToEntityAttribute(String dbData) {
+    public TipoCanalVendas convertToEntityAttribute(final String dbData) {
         return dbData != null ? TipoCanalVendas.fromDescricao(dbData) : null;
     }
 }

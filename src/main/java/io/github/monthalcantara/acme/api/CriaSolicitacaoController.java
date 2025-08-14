@@ -2,22 +2,23 @@ package io.github.monthalcantara.acme.api;
 
 import io.github.monthalcantara.acme.api.dto.request.SolicitacaoRequest;
 import io.github.monthalcantara.acme.api.dto.response.SolicitacaoCriadaResponse;
-import io.github.monthalcantara.acme.application.validator.SolicitacaoRequestValidator;
-import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
 import io.github.monthalcantara.acme.application.service.CriaSolicitacaoService;
+import io.github.monthalcantara.acme.api.validator.SolicitacaoRequestValidator;
+import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+@Slf4j
 @RestController
-@RequestMapping("/api/v1/propostas")
+@RequestMapping("/v1/propostas")
 public class CriaSolicitacaoController {
 
     private final CriaSolicitacaoService criaSolicitacaoService;
     private final SolicitacaoRequestValidator requestValidator;
 
-    public CriaSolicitacaoController(CriaSolicitacaoService criaSolicitacaoService, SolicitacaoRequestValidator requestValidator) {
+    public CriaSolicitacaoController(final CriaSolicitacaoService criaSolicitacaoService, final SolicitacaoRequestValidator requestValidator) {
         this.criaSolicitacaoService = criaSolicitacaoService;
         this.requestValidator = requestValidator;
     }

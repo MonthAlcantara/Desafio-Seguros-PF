@@ -3,7 +3,6 @@ package io.github.monthalcantara.acme.api;
 import io.github.monthalcantara.acme.api.dto.response.SolicitacaoResponse;
 import io.github.monthalcantara.acme.application.service.ConsultaSolicitacaoService;
 import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +13,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/propostas")
-@RequiredArgsConstructor
+@RequestMapping("/v1/propostas")
 public class ConsultaSolicitacaoController {
 
     private final ConsultaSolicitacaoService consultaSolicitacaoService;
+
+    public ConsultaSolicitacaoController(final ConsultaSolicitacaoService consultaSolicitacaoService) {
+        this.consultaSolicitacaoService = consultaSolicitacaoService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<SolicitacaoResponse> porId(@PathVariable final UUID id) {

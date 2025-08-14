@@ -31,20 +31,20 @@ public enum ClassificacaoRisco {
 
     private final Map<TipoCategoria, BigDecimal> limitesPorCategoria;
 
-    ClassificacaoRisco(Map<TipoCategoria, BigDecimal> limites) {
+    ClassificacaoRisco(final Map<TipoCategoria, BigDecimal> limites) {
         this.limitesPorCategoria = limites;
     }
 
-    public TipoStatus podeAprovar(TipoCategoria categoria, BigDecimal capitalSegurado) {
+    public TipoStatus podeAprovar(final TipoCategoria categoria, final BigDecimal capitalSegurado) {
         BigDecimal limite = limitesPorCategoria.getOrDefault(categoria, limitesPorCategoria.get(TipoCategoria.OUTROS));
         if (capitalSegurado == null || limite == null) return TipoStatus.REJEITADO;
         return capitalSegurado.compareTo(limite) <= 0 ? TipoStatus.APROVADO : TipoStatus.REJEITADO;
     }
 
-    public static ClassificacaoRisco fromString(String s) {
-        if (s == null) return NO_INFO;
+    public static ClassificacaoRisco fromString(final String classificacao) {
+        if (classificacao == null) return NO_INFO;
         try {
-            return ClassificacaoRisco.valueOf(s.trim().toUpperCase(Locale.ROOT));
+            return ClassificacaoRisco.valueOf(classificacao.trim().toUpperCase(Locale.ROOT));
         } catch (Exception ex) {
             return NO_INFO;
         }

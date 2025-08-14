@@ -12,12 +12,12 @@ public enum TipoCanalVendas {
     private static final Map<String, TipoCanalVendas> DESCRICAO_MAP = new HashMap<>();
 
     static {
-        for (TipoCanalVendas canal : TipoCanalVendas.values()) {
+        for (final TipoCanalVendas canal : TipoCanalVendas.values()) {
             DESCRICAO_MAP.put(canal.descricao, canal);
         }
     }
 
-    TipoCanalVendas(String descricao) {
+    TipoCanalVendas(final String descricao) {
         this.descricao = descricao;
     }
 
@@ -25,11 +25,11 @@ public enum TipoCanalVendas {
         return descricao;
     }
 
-    public static boolean isDescricaoValida(String descricao) {
+    public static boolean isDescricaoValida(final String descricao) {
         return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toLowerCase());
     }
 
-    public static TipoCanalVendas fromDescricao(String descricao) {
+    public static TipoCanalVendas fromDescricao(final String descricao) {
         return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toLowerCase());
     }
 }

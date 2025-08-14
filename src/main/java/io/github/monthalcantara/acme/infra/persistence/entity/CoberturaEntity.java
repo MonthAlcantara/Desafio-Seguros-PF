@@ -1,9 +1,13 @@
 package io.github.monthalcantara.acme.infra.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -26,8 +30,4 @@ public class CoberturaEntity {
     @JoinColumn(name = "solicitacao_id")
     private SolicitacaoEntity solicitacaoEntity;
 
-    public CoberturaEntity(String nome, BigDecimal valor) {
-        this.nome = nome;
-        this.valor = valor;
-    }
 }
