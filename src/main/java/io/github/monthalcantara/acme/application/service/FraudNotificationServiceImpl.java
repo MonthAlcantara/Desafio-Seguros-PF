@@ -1,12 +1,9 @@
-package io.github.monthalcantara.acme.infra.fraud;
+package io.github.monthalcantara.acme.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.monthalcantara.acme.application.service.AtualizaSolicitacaoStatusService;
-import io.github.monthalcantara.acme.application.service.FraudNotificationService;
+import io.github.monthalcantara.acme.domain.model.Solicitacao;
 import io.github.monthalcantara.acme.infra.fraud.dto.request.FraudCheckRequest;
 import io.github.monthalcantara.acme.infra.fraud.dto.response.FraudCheckResponse;
-import io.github.monthalcantara.acme.domain.model.Solicitacao;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -24,31 +22,34 @@ public class FraudNotificationServiceImpl implements FraudNotificationService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final AtualizaSolicitacaoStatusService atualizaSolicitacaoStatusService;
-    @Value("${acme.fraud-api.url}")
-    private String fraudApiUrl;
 
-    public FraudNotificationServiceImpl(final HttpClient httpClient, final ObjectMapper objectMapper, final AtualizaSolicitacaoStatusService atualizaSolicitacaoStatusService) {
+    public FraudNotificationServiceImpl(HttpClient httpClient, ObjectMapper objectMapper, AtualizaSolicitacaoStatusService atualizaSolicitacaoStatusService) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.atualizaSolicitacaoStatusService = atualizaSolicitacaoStatusService;
     }
 
+    @Value("${acme.fraud-api.url}")
+    private String fraudApiUrl;
+
     @Override
-    public void notifyAsync(final Solicitacao solicitacao) {
+    public void notifyAsync(Solicitacao solicitacao) {
         CompletableFuture.runAsync(() -> {
             try {
-                final var payload = new FraudCheckRequest(solicitacao.getClienteId(), solicitacao.getId());
-                final var jsonPayload = objectMapper.writeValueAsString(payload);
+                FraudCheckRequest payload = new FraudCheckRequest(solicitacao.getClienteId(), solicitacao.getId());
+                String jsonPayload = objectMapper.writeValueAsString(payload);
 
-                log.info("[Fraude] Enviando requisição para API de fraudes. ID={}. Endpoint: {}", solicitacao.getId(), fraudApiUrl);
+                String apiUrlWithScenario = String.format("%s?scenario=%d", fraudApiUrl, new Random().nextInt(4));
 
-                final var request = HttpRequest.newBuilder()
-                        .uri(URI.create(fraudApiUrl))
+                log.info("[Fraude] Enviando requisição para API de fraudes. ID={}. Endpoint: {}", solicitacao.getId(), apiUrlWithScenario);
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(apiUrlWithScenario))
                         .header("Content-Type", "application/json")
                         .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                         .build();
 
-                final var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
                 log.info("[Fraude] Resposta recebida da API. ID={}. Status: {}", solicitacao.getId(), response.statusCode());
 

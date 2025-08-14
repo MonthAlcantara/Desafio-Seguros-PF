@@ -1,32 +1,41 @@
 package io.github.monthalcantara.acme.domain.enums;
 
-import lombok.Getter;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
-import java.util.Arrays;
-
-@Getter
 public enum ClassificacaoFraude {
-    HIGH_RISK("HIGH_RISK", TipoStatus.REJEITADO),
-    MEDIUM_RISK("MEDIUM_RISK", TipoStatus.PENDENTE),
-    LOW_RISK("LOW_RISK", TipoStatus.VALIDADO),
-    UNKNOWN("UNKNOWN", TipoStatus.PENDENTE);
+    HIGH_RISK("HIGH_RISK"),
+    REGULAR("REGULAR"),
+    PREFERENTIAL("PREFERENTIAL"),
+    NO_INFO("NO_INFO"),
+    UNKNOWN("UNKNOWN");
 
     private final String descricao;
-    private final TipoStatus status;
+    private static final Map<String, ClassificacaoFraude> DESCRICAO_MAP = new HashMap<>();
 
-    ClassificacaoFraude(String descricao, TipoStatus status) {
+    static {
+        for (final ClassificacaoFraude classificacao : ClassificacaoFraude.values()) {
+            DESCRICAO_MAP.put(classificacao.descricao, classificacao);
+        }
+    }
+
+    ClassificacaoFraude(final String descricao) {
         this.descricao = descricao;
-        this.status = status;
     }
 
-    public TipoStatus getStatus() {
-        return this.status;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public static ClassificacaoFraude fromDescricao(String descricao) {
-        return Arrays.stream(values())
-                .filter(c -> c.descricao.equalsIgnoreCase(descricao))
-                .findFirst()
-                .orElse(UNKNOWN);
+    public static boolean isDescricaoValida(final String descricao) {
+        return descricao != null && !descricao.isBlank() && DESCRICAO_MAP.containsKey(descricao.toUpperCase(Locale.ROOT));
+    }
+
+    public static ClassificacaoFraude fromDescricao(final String descricao) {
+        if (descricao == null || descricao.isBlank()) {
+            return UNKNOWN;
+        }
+        return DESCRICAO_MAP.getOrDefault(descricao.toUpperCase(Locale.ROOT), UNKNOWN);
     }
 }
