@@ -1,7 +1,6 @@
 package io.github.monthalcantara.acme.application.service;
 
 import io.github.monthalcantara.acme.domain.enums.TipoStatus;
-import io.github.monthalcantara.acme.domain.model.Solicitacao;
 import io.github.monthalcantara.acme.exception.SolicitacaoNaoEncontradaException;
 import io.github.monthalcantara.acme.exception.StatusNaoPermitidoException;
 import io.github.monthalcantara.acme.infra.fraud.dto.response.FraudCheckResponse;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j

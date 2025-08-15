@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -92,9 +91,7 @@ class CriaSolicitacaoControllerTest {
         doThrow(new ValidacaoNegocioException(List.of("Erros de validação de negócio"))).when(requestValidator).validar(any(SolicitacaoRequest.class));
 
         // Quando e Então
-        ValidacaoNegocioException exception = assertThrows(ValidacaoNegocioException.class, () -> {
-            controller.criarApolice(request, idempotencyKey);
-        });
+        ValidacaoNegocioException exception = assertThrows(ValidacaoNegocioException.class, () -> controller.criarApolice(request, idempotencyKey));
 
         assertEquals("Erros de validação de negócio", exception.getMessage());
     }

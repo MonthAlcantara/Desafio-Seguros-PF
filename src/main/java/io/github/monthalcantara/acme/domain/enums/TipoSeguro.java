@@ -18,7 +18,7 @@ public enum TipoSeguro {
 
     static {
         for (final TipoSeguro seguro : TipoSeguro.values()) {
-            DESCRICAO_MAP.put(seguro.descricao, seguro);
+            DESCRICAO_MAP.put(seguro.descricao.toLowerCase(), seguro);
         }
     }
 
