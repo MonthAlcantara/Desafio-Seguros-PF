@@ -21,6 +21,18 @@ O foco principal do projeto é a demonstração de boas práticas de desenvolvim
 
 -----
 
+### Visão Geral da Arquitetura
+
+A arquitetura do projeto é baseada em microsserviços e segue o padrão de Arquitetura Orientada a Eventos (EDA). A aplicação atua como um dos componentes centrais deste ecossistema, processando o ciclo de vida das solicitações.
+
+**Idempotência**: O endpoint de criação de propostas utiliza uma x-idempotency-key para garantir que a mesma solicitação não seja processada mais de uma vez. Essa é uma prática essencial em sistemas distribuídos para prevenir efeitos colaterais indesejados.
+
+**Processamento Assíncrono**: Ao receber uma nova solicitação, a API retorna uma resposta inicial e, de forma assíncrona, delega a validação de fraude a um serviço externo (simulado pelo WireMock). O status da solicitação é então atualizado no banco de dados.
+
+**Observabilidade**: O projeto é instrumentado com o Micrometer para coletar métricas e traces. As métricas são enviadas para o Prometheus e visualizadas em dashboards no Grafana. O Zipkin é utilizado para rastrear o fluxo de requisições através dos serviços, o que é vital para diagnosticar problemas em arquiteturas distribuídas.
+
+**Testabilidade**: A arquitetura foi pensada para ser facilmente testável. O WireMock atua como um simulador da API de fraude, permitindo que os testes de integração do nosso microsserviço sejam executados de forma confiável, sem depender da disponibilidade de outros serviços.
+
 ### 🚀 Pré-requisitos
 
 Para rodar o projeto localmente, você precisa ter as seguintes ferramentas instaladas:
