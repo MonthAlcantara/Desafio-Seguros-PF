@@ -1,4 +1,4 @@
-package io.github.monthalcantara.acme.api;
+package io.github.monthalcantara.acme.api.controller;
 
 import io.github.monthalcantara.acme.api.dto.response.SolicitacaoResponse;
 import io.github.monthalcantara.acme.application.service.ConsultaSolicitacaoService;

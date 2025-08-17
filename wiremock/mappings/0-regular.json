@@ -18,6 +18,7 @@
       "customerId": "{{jsonPath request.body '$.customerId'}}",
       "analyzedAt": "2024-05-10T12:00:00Z",
       "classification": "REGULAR"
-    }
+    },
+    "transformers": ["response-template"]
   }
 }

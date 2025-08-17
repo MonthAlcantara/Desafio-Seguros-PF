@@ -100,7 +100,7 @@ public class SolicitacaoEntity {
         historicoMovimentacoes.add(h);
     }
 
-    public void setStatusComHistorico(TipoStatus novoStatus) {
+    public void setAtualizacaoStatusNoHistorico(TipoStatus novoStatus) {
         this.status = novoStatus;
         addHistorico(novoStatus.getDescricao(), Instant.now());
     }

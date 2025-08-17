@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@Entity
+@Table(name = "cobertura")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "cobertura")
 public class CoberturaEntity {
 
     @Id

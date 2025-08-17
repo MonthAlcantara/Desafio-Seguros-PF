@@ -1,7 +1,40 @@
 version: '3.8'
 
 services:
+#  # acme-application
+#  app:
+#    build: .
+#    container_name: acme-application
+#    restart: unless-stopped
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      # Configurações do banco de dados para a aplicação
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/acme
+#      SPRING_DATASOURCE_USERNAME: acme_user
+#      SPRING_DATASOURCE_PASSWORD: acme_pass
+#      # Configuração do broker Kafka
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+#    depends_on:
+#      - postgres
+#      - kafka
+#      - wiremock
+#      - zipkin
+#    networks:
+#      - acme-network
 
+  zipkin:
+    image: openzipkin/zipkin:2
+    ports:
+      - "9411:9411"
+    # Define o healthcheck para o Zipkin.
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --quiet --tries=1 --timeout=2 --spider http://localhost:9411 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  # Base de Dados PostgreSQL
   postgres:
     image: postgres:16
     container_name: acme-postgres
@@ -22,83 +55,86 @@ services:
       timeout: 5s
       retries: 5
 
+  # Painel de administração para o PostgreSQL
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: always
+    container_name: acme-pgadmin
+    restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 80
     ports:
       - "5000:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - acme-network
     depends_on:
       - postgres
-    networks:
-      - acme-network
 
-  flyway:
-    image: flyway/flyway:10
-    container_name: acme-flyway
-    command: -url=jdbc:postgresql://postgres:5432/acme -user=acme_user -password=acme_pass -locations=filesystem:/flyway/sql migrate
-    volumes:
-      - ./src/main/resources/db/migration:/flyway/sql
-    networks:
-      - acme-network
-    depends_on:
-      postgres:
-        condition: service_healthy # Garante que o Flyway só iniciará quando o Postgres estiver saudável
-
+  # WireMock para simular a API de fraude
   wiremock:
-    image: wiremock/wiremock:3.2.0
+    image: wiremock/wiremock:2.35.0
     container_name: acme-wiremock
-    command: --global-response-templating
     ports:
       - "8081:8080"
     volumes:
       - ./wiremock:/home/wiremock
+    command: ["--global-response-templating"]
     networks:
       - acme-network
 
-  prometheus:
-    image: prom/prometheus:v2.47.0
-    container_name: acme-prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+  # Zookeeper, necessário para o Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: acme-zookeeper
     ports:
-      - '9090:9090'
-    restart: unless-stopped
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     networks:
       - acme-network
 
-  grafana:
-    image: grafana/grafana:10.0.0
-    container_name: acme-grafana
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: acme-kafka
     ports:
-      - '3000:3000'
-    networks:
-      - acme-network
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
-      - prometheus
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/:/etc/grafana/provisioning/ # Adicione esta linha
-    restart: unless-stopped
-
-  zipkin:
-    image: openzipkin/zipkin
-    container_name: acme-zipkin
-    ports:
-      - '9411:9411'
+      - zookeeper
     networks:
       - acme-network
-    restart: unless-stopped
+
+  # AKHQ, interface para gerenciar o Kafka
+  akhq:
+    image: tchiotludo/akhq
+    container_name: acme-akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-host:
+              properties:
+                bootstrap.servers: "kafka:29092"
+    ports:
+      - "8082:8080"
+    depends_on:
+      - kafka
+    networks:
+      - acme-network
 
 volumes:
   postgres_data:
-  grafana_data:
+  pgadmin_data:
 
 networks:
   acme-network:

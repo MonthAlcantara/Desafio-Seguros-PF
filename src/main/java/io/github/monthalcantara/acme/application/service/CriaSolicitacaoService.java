@@ -1,53 +1,71 @@
 package io.github.monthalcantara.acme.application.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.monthalcantara.acme.domain.model.Solicitacao;
+import io.github.monthalcantara.acme.infra.persistence.entity.OutboxEntity;
 import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
+import io.github.monthalcantara.acme.infra.persistence.repository.OutboxRepository;
 import io.github.monthalcantara.acme.infra.persistence.repository.SolicitacaoRepository;
 import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class CriaSolicitacaoService {
 
-    private final SolicitacaoRepository repository;
-    private final FraudNotificationService fraudNotificationService;
+    private final SolicitacaoRepository solicitacaoRepository;
+    private final OutboxRepository outboxRepository;
+    private final ObjectMapper objectMapper;
 
-    public CriaSolicitacaoService(final SolicitacaoRepository repository, final FraudNotificationService fraudNotificationService) {
-        this.repository = repository;
-        this.fraudNotificationService = fraudNotificationService;
+    public CriaSolicitacaoService(final SolicitacaoRepository solicitacaoRepository, final OutboxRepository outboxRepository, final ObjectMapper objectMapper) {
+        this.solicitacaoRepository = solicitacaoRepository;
+        this.outboxRepository = outboxRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Transactional
     public Solicitacao criar(final Solicitacao solicitacao, final String chaveIdempotencia) {
         log.info("[Solicitacao] Início da criação. chaveIdempotencia={}", chaveIdempotencia);
-        final var result = repository.findByChaveIdempotencia(chaveIdempotencia)
+
+        final var result = solicitacaoRepository.findByChaveIdempotencia(chaveIdempotencia)
                 .map(SolicitacaoMapper::toModel)
                 .orElseGet(() -> criarNova(solicitacao, chaveIdempotencia));
 
         log.info("[Solicitacao] Criação finalizada. id={}", result.getId());
 
-        if (result.getStatus().equalsIgnoreCase("recebido")) {
-            log.info("[Fraude] Acionando notificação assíncrona para ID: {}", result.getId());
-            fraudNotificationService.notifyAsync(result);
-        } else {
-            log.warn("[Fraude] Não acionado para ID: {}. Status da solicitação não é 'RECEBIDO'. Status: {}", result.getId(), result.getStatus());
-        }
-
         return result;
     }
 
     private Solicitacao criarNova(final Solicitacao solicitacao, final String chaveIdempotencia) {
-        solicitacao.inicializarCamposDefault(chaveIdempotencia);
+        try {
+            solicitacao.inicializarCamposDefault(chaveIdempotencia);
 
-        final SolicitacaoEntity entidade = SolicitacaoMapper.toEntity(solicitacao);
-        entidade.vincularRelacionamentos();
+            final SolicitacaoEntity solicitacaoEntity = SolicitacaoMapper.toEntity(solicitacao);
+            solicitacaoEntity.vincularRelacionamentos();
+            final var solicitacaoSalva = solicitacaoRepository.save(solicitacaoEntity);
+            log.info("[Solicitacao] Nova solicitação persistida. id={}, status={}", solicitacaoSalva.getId(), solicitacaoSalva.getStatus());
 
-        final var solicitacaoSalva = repository.save(entidade);
-        log.info("[Solicitacao] Nova solicitação persistida. id={}, status={}", solicitacaoSalva.getId(), solicitacaoSalva.getStatus());
+            final String solicitacaoJson = objectMapper.writeValueAsString(solicitacao);
+            final OutboxEntity outboxEvent = new OutboxEntity(
+                    solicitacaoSalva.getId(),
+                    UUID.randomUUID().toString(),
+                    "acme-solicitacao-criada",
+                    "acme-solicitacao-criada",
+                    solicitacaoJson
+            );
+            outboxRepository.save(outboxEvent);
+            log.info("[Outbox] Evento criado na tabela outbox para a solicitação: {}", solicitacao.getId());
 
-        return SolicitacaoMapper.toModel(solicitacaoSalva);
+            return SolicitacaoMapper.toModel(solicitacaoSalva);
+        } catch (JsonProcessingException e) {
+            log.error("[Solicitacao] Erro ao serializar a solicitação para o outbox: {}", e.getMessage());
+            // A transação será revertida se a serialização falhar
+            throw new RuntimeException("Falha ao serializar solicitação para evento outbox", e);
+        }
     }
 }
