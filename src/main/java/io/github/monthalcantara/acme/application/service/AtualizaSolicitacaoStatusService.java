@@ -4,11 +4,12 @@ import io.github.monthalcantara.acme.domain.enums.TipoStatus;
 import io.github.monthalcantara.acme.exception.SolicitacaoNaoEncontradaException;
 import io.github.monthalcantara.acme.exception.StatusNaoPermitidoException;
 import io.github.monthalcantara.acme.infra.client.fraud.dto.response.FraudCheckResponse;
+import io.github.monthalcantara.acme.infra.kafka.event.OrderStatusEvent;
+import io.github.monthalcantara.acme.infra.kafka.producer.OrderEventProducer;
 import io.github.monthalcantara.acme.infra.persistence.entity.OutboxEntity;
 import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
 import io.github.monthalcantara.acme.infra.persistence.repository.SolicitacaoRepository;
 import io.github.monthalcantara.acme.mapper.SolicitacaoMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +19,20 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AtualizaSolicitacaoStatusService {
 
     private final SolicitacaoRepository solicitacaoRepository;
     private final ValidadorDeRegrasAdicionaisService validadorDeRegrasAdicionaisService;
     private final RemoveOutboxEventService removeOutboxEventService;
+
+    private final OrderEventProducer orderEventProducer;
+
+    public AtualizaSolicitacaoStatusService(SolicitacaoRepository solicitacaoRepository, ValidadorDeRegrasAdicionaisService validadorDeRegrasAdicionaisService, RemoveOutboxEventService removeOutboxEventService, OrderEventProducer orderEventProducer) {
+        this.solicitacaoRepository = solicitacaoRepository;
+        this.validadorDeRegrasAdicionaisService = validadorDeRegrasAdicionaisService;
+        this.removeOutboxEventService = removeOutboxEventService;
+        this.orderEventProducer = orderEventProducer;
+    }
 
     @Transactional
     public void atualizar(final UUID solicitacaoId, final OutboxEntity event, final FraudCheckResponse response) {
@@ -31,11 +40,13 @@ public class AtualizaSolicitacaoStatusService {
 
         solicitacaoRepository.findById(solicitacaoId).ifPresent(solicitacao -> {
             final TipoStatus novoStatus = validadorDeRegrasAdicionaisService.validar(SolicitacaoMapper.toModel(solicitacao), response.getClassificacao());
-
             solicitacao.setAtualizacaoStatusNoHistorico(novoStatus);
+            log.info("[Status] Atualizando solicitação ID: {}. Status atual: {}, Novo Status: {}", solicitacaoId, solicitacao.getStatus().getDescricao(), novoStatus.getDescricao());
             solicitacaoRepository.save(solicitacao);
             removeOutboxEventService.remover(solicitacaoId, novoStatus.getDescricao());
             log.info("[Status] Finalizada a atualização. Solicitação ID: {}, Novo Status: {}", solicitacaoId, novoStatus.getDescricao());
+            orderEventProducer.send(new OrderStatusEvent(solicitacaoId, novoStatus.getDescricao(), Instant.now()));
+
         });
     }
 
@@ -51,9 +62,11 @@ public class AtualizaSolicitacaoStatusService {
 
         solicitacao.setAtualizacaoStatusNoHistorico(TipoStatus.CANCELADA);
         solicitacao.setFinalizadoEm(Instant.now());
+        log.info("[Status] Cancelando solicitação ID: {}. Status atual: {}", solicitacaoId, status.getDescricao());
         solicitacaoRepository.save(solicitacao);
         removeOutboxEventService.remover(solicitacaoId, status.getDescricao());
+        log.info("[Status] Solicitação ID: {} cancelada com sucesso. Novo Status: {}", solicitacaoId, TipoStatus.CANCELADA.getDescricao());
+        orderEventProducer.send(new OrderStatusEvent(solicitacaoId, status.getDescricao(), Instant.now()));
 
-        // TODO: Publicar evento de cancelamento para outros serviços
     }
 }

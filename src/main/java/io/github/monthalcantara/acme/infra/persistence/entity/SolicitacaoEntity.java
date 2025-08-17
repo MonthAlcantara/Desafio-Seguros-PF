@@ -100,11 +100,15 @@ public class SolicitacaoEntity {
         historicoMovimentacoes.add(h);
     }
 
-    public void setAtualizacaoStatusNoHistorico(TipoStatus novoStatus) {
-        this.status = novoStatus;
-        addHistorico(novoStatus.getDescricao(), Instant.now());
+    public void setAtualizacaoStatusNoHistorico(TipoStatus status) {
+        if (status != TipoStatus.CANCELADA) {
+            addHistorico(status.getDescricao(), Instant.now());
+            if (status == TipoStatus.VALIDADO) {
+                setAtualizacaoStatusNoHistorico(TipoStatus.PENDENTE);
+            }
+            this.status = status;
+        }
     }
-
     public void vincularRelacionamentos() {
         getCoberturaEntities().forEach(cobertura -> cobertura.setSolicitacaoEntity(this));
         getAssistenciaEntities().forEach(assistencia -> assistencia.setSolicitacaoEntity(this));

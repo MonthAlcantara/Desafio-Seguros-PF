@@ -3,6 +3,8 @@ package io.github.monthalcantara.acme.application.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.monthalcantara.acme.domain.model.Solicitacao;
+import io.github.monthalcantara.acme.infra.kafka.event.OrderStatusEvent;
+import io.github.monthalcantara.acme.infra.kafka.producer.OrderEventProducer;
 import io.github.monthalcantara.acme.infra.persistence.entity.OutboxEntity;
 import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
 import io.github.monthalcantara.acme.infra.persistence.repository.OutboxRepository;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Slf4j
@@ -22,10 +25,13 @@ public class CriaSolicitacaoService {
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
 
-    public CriaSolicitacaoService(final SolicitacaoRepository solicitacaoRepository, final OutboxRepository outboxRepository, final ObjectMapper objectMapper) {
+    private final OrderEventProducer orderEventProducer;
+
+    public CriaSolicitacaoService(final SolicitacaoRepository solicitacaoRepository, final OutboxRepository outboxRepository, final ObjectMapper objectMapper, OrderEventProducer orderEventProducer) {
         this.solicitacaoRepository = solicitacaoRepository;
         this.outboxRepository = outboxRepository;
         this.objectMapper = objectMapper;
+        this.orderEventProducer = orderEventProducer;
     }
 
     @Transactional
@@ -60,6 +66,7 @@ public class CriaSolicitacaoService {
             );
             outboxRepository.save(outboxEvent);
             log.info("[Outbox] Evento criado na tabela outbox para a solicitação: {}", solicitacao.getId());
+            orderEventProducer.send(new OrderStatusEvent(solicitacaoSalva.getId(), solicitacaoSalva.getStatus().getDescricao(), Instant.now()));
 
             return SolicitacaoMapper.toModel(solicitacaoSalva);
         } catch (JsonProcessingException e) {
