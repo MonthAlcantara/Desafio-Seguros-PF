@@ -1,8 +1,9 @@
 package io.github.monthalcantara.acme.mapper;
 
 import io.github.monthalcantara.acme.domain.model.HistoricoMovimentacao;
-import io.github.monthalcantara.acme.infra.persistence.entity.HistoricoMovimentacaoEntity;
-import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.HistoricoMovimentacaoEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.SolicitacaoEntity;
+import io.github.monthalcantara.acme.util.mapper.mapper.HistoricoMovimentacaoMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

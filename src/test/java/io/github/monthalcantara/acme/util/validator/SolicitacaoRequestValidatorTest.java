@@ -1,6 +1,6 @@
-package io.github.monthalcantara.acme.api.validator;
+package io.github.monthalcantara.acme.util.validator;
 
-import io.github.monthalcantara.acme.api.dto.request.SolicitacaoRequest;
+import io.github.monthalcantara.acme.infrastructure.web.dto.request.SolicitacaoRequest;
 import io.github.monthalcantara.acme.domain.enums.TipoCanalVendas;
 import io.github.monthalcantara.acme.domain.enums.TipoCategoria;
 import io.github.monthalcantara.acme.domain.enums.TipoMetodoPagamento;

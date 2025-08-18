@@ -1,6 +1,6 @@
 package io.github.monthalcantara.acme.mapper;
 
-import io.github.monthalcantara.acme.api.dto.request.SolicitacaoRequest;
+import io.github.monthalcantara.acme.infrastructure.web.dto.request.SolicitacaoRequest;
 import io.github.monthalcantara.acme.domain.enums.TipoCanalVendas;
 import io.github.monthalcantara.acme.domain.enums.TipoCategoria;
 import io.github.monthalcantara.acme.domain.enums.TipoMetodoPagamento;
@@ -9,10 +9,11 @@ import io.github.monthalcantara.acme.domain.model.Assistencia;
 import io.github.monthalcantara.acme.domain.model.Cobertura;
 import io.github.monthalcantara.acme.domain.model.HistoricoMovimentacao;
 import io.github.monthalcantara.acme.domain.model.Solicitacao;
-import io.github.monthalcantara.acme.infra.persistence.entity.AssistenciaEntity;
-import io.github.monthalcantara.acme.infra.persistence.entity.CoberturaEntity;
-import io.github.monthalcantara.acme.infra.persistence.entity.HistoricoMovimentacaoEntity;
-import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.AssistenciaEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.CoberturaEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.HistoricoMovimentacaoEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.SolicitacaoEntity;
+import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

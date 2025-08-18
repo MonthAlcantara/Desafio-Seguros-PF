@@ -4,7 +4,7 @@ import io.github.monthalcantara.acme.domain.enums.TipoCanalVendas;
 import io.github.monthalcantara.acme.domain.enums.TipoCategoria;
 import io.github.monthalcantara.acme.domain.enums.TipoMetodoPagamento;
 import io.github.monthalcantara.acme.domain.enums.TipoStatus;
-import io.github.monthalcantara.acme.infra.persistence.entity.SolicitacaoEntity;
+import io.github.monthalcantara.acme.infrastructure.persistence.entity.SolicitacaoEntity;
 
 import java.math.BigDecimal;
 import java.nio.file.Files;

@@ -2,34 +2,34 @@ version: '3.8'
 
 services:
   # Base de Dados PostgreSQL
-  #acme-app:
-  #    build: .
-  #    container_name: acme-app
-  #    restart: unless-stopped
-  #    ports:
-  #      - "8080:8080"
-  #    environment:
-  #      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/acme
-  #      SPRING_DATASOURCE_USERNAME: acme_user
-  #      SPRING_DATASOURCE_PASSWORD: acme_pass
-  #
-  #      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-  #
-  #      acme.fraud-api.url: http://wiremock:8080/api/v1/fraud-check
-  #
-  #      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
-  #
-  #    depends_on:
-  #      postgres:
-  #        condition: service_healthy
-  #      kafka-topics-creator:
-  #        condition: service_completed_successfully
-  #      wiremock:
-  #        condition: service_healthy
-  #      zipkin:
-  #        condition: service_healthy
-  #    networks:
-  #      - acme-network
+  acme-app:
+      build: .
+      container_name: acme-app
+      restart: unless-stopped
+      ports:
+        - "8080:8080"
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/acme
+        SPRING_DATASOURCE_USERNAME: acme_user
+        SPRING_DATASOURCE_PASSWORD: acme_pass
+
+        SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+
+        acme.fraud-api.url: http://wiremock:8080/api/v1/fraud-check
+
+        MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+      depends_on:
+        postgres:
+          condition: service_healthy
+        kafka-topics-creator:
+          condition: service_completed_successfully
+        wiremock:
+          condition: service_healthy
+        zipkin:
+          condition: service_healthy
+      networks:
+        - acme-network
   postgres:
     image: postgres:16
     container_name: acme-postgres
