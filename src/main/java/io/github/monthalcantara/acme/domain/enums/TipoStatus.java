@@ -35,4 +35,11 @@ public enum TipoStatus {
     public static TipoStatus fromDescricao(final String descricao) {
         return descricao == null || descricao.isBlank() ? null : DESCRICAO_MAP.get(descricao.toUpperCase());
     }
+    public static boolean isStatusFinal(final String descricao) {
+        if(isDescricaoValida(descricao)) {
+            TipoStatus status = fromDescricao(descricao);
+            return status == REJEITADO || status == APROVADO || status == CANCELADA;
+        }
+        return false;
+    }
 }
