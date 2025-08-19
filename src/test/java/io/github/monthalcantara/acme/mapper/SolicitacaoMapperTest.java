@@ -13,7 +13,7 @@ import io.github.monthalcantara.acme.infrastructure.persistence.entity.Assistenc
 import io.github.monthalcantara.acme.infrastructure.persistence.entity.CoberturaEntity;
 import io.github.monthalcantara.acme.infrastructure.persistence.entity.HistoricoMovimentacaoEntity;
 import io.github.monthalcantara.acme.infrastructure.persistence.entity.SolicitacaoEntity;
-import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
+import io.github.monthalcantara.acme.util.mapper.SolicitacaoMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -114,13 +114,13 @@ class SolicitacaoMapperTest {
     @Test
     @DisplayName("Deve mapear SolicitacaoRequest para Domain Model com sucesso")
     void deveMapearRequestParaModel() {
-        // Dado
+
         final var request = criarSolicitacaoRequest();
 
-        // Quando
+
         final var model = SolicitacaoMapper.toModel(request);
 
-        // Então
+
         assertNotNull(model);
         assertEquals(request.getClienteId(), model.getClienteId());
         assertEquals(request.getProdutoId(), model.getProdutoId());
@@ -137,23 +137,23 @@ class SolicitacaoMapperTest {
     @Test
     @DisplayName("Deve retornar null ao mapear um SolicitacaoRequest nulo para Domain Model")
     void deveRetornarNullAoMapearRequestNulo() {
-        // Quando
+
         final var model = SolicitacaoMapper.toModel((SolicitacaoEntity) null);
 
-        // Então
+
         assertNull(model);
     }
 
     @Test
     @DisplayName("Deve mapear Domain Model para SolicitacaoResponse com sucesso (usando builder)")
     void deveMapearModelParaResponseComBuilder() {
-        // Dado
+
         final var model = criarSolicitacaoModel();
 
-        // Quando
+
         final var response = SolicitacaoMapper.toResponse(model);
 
-        // Então
+
         assertNotNull(response);
         assertEquals(model.getId(), response.getId());
         assertEquals(model.getClienteId(), response.getClienteId());
@@ -166,23 +166,23 @@ class SolicitacaoMapperTest {
     @Test
     @DisplayName("Deve retornar null ao mapear um Domain Model nulo para SolicitacaoResponse")
     void deveRetornarNullAoMapearModelNuloParaResponse() {
-        // Quando
+
         final var response = SolicitacaoMapper.toResponse(null);
 
-        // Então
+
         assertNull(response);
     }
 
     @Test
     @DisplayName("Deve mapear Domain Model para SolicitacaoCriadaResponse com sucesso")
     void deveMapearModelParaSolicitacaoCriadaResponse() {
-        // Dado
+
         final var model = criarSolicitacaoModel();
 
-        // Quando
+
         final var response = SolicitacaoMapper.toResponseDto(model);
 
-        // Então
+
         assertNotNull(response);
         assertEquals(model.getId(), response.getId());
         assertEquals(model.getCriadoEm(), response.getCriadoEm());
@@ -191,23 +191,23 @@ class SolicitacaoMapperTest {
     @Test
     @DisplayName("Deve retornar null ao mapear um Domain Model nulo para SolicitacaoCriadaResponse")
     void deveRetornarNullAoMapearModelNuloParaCriadaResponse() {
-        // Quando
+
         final var response = SolicitacaoMapper.toResponseDto(null);
 
-        // Então
+
         assertNull(response);
     }
 
     @Test
     @DisplayName("Deve mapear Domain Model para SolicitacaoEntity com sucesso")
     void deveMapearModelParaEntity() {
-        // Dado
+
         final var model = criarSolicitacaoModel();
 
-        // Quando
+
         final var entity = SolicitacaoMapper.toEntity(model);
 
-        // Então
+
         assertNotNull(entity);
         assertEquals(model.getId(), entity.getId());
         assertEquals(model.getClienteId(), entity.getClienteId());
@@ -223,23 +223,23 @@ class SolicitacaoMapperTest {
     @Test
     @DisplayName("Deve retornar null ao mapear um Domain Model nulo para SolicitacaoEntity")
     void deveRetornarNullAoMapearModelNuloParaEntity() {
-        // Quando
+
         final var entity = SolicitacaoMapper.toEntity(null);
 
-        // Então
+
         assertNull(entity);
     }
 
     @Test
     @DisplayName("Deve mapear SolicitacaoEntity para Domain Model com sucesso")
     void deveMapearEntityParaModel() {
-        // Dado
+
         final var entity = criarSolicitacaoEntity();
 
-        // Quando
+
         final var model = SolicitacaoMapper.toModel(entity);
 
-        // Então
+
         assertNotNull(model);
         assertEquals(entity.getId(), model.getId());
         assertEquals(entity.getClienteId(), model.getClienteId());
@@ -255,10 +255,10 @@ class SolicitacaoMapperTest {
     @Test
     @DisplayName("Deve retornar null ao mapear uma SolicitacaoEntity nula para Domain Model")
     void deveRetornarNullAoMapearEntityNulaParaModel() {
-        // Quando
+
         final var model = SolicitacaoMapper.toModel((SolicitacaoRequest) null);
 
-        // Então
+
         assertNull(model);
     }
 }

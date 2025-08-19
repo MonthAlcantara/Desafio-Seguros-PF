@@ -58,12 +58,10 @@ class FraudClient {
                 return fraudResponse;
             } else {
                 log.error("[Fraude] Erro na resposta da API. ID={}. Status: {}. Corpo: {}", solicitacao.getId(), response.statusCode(), response.body());
-                // Lidar com a falha da API, como lançar uma exceção para que o evento não seja removido do outbox
                 throw new IOException("Falha na chamada da API de fraudes com status: " + response.statusCode());
             }
         } catch (final Exception e) {
             log.error("[Fraude] Falha inesperada ao notificar API. ID={}. Erro: {}", solicitacao.getId(), e.getMessage());
-            // A exceção será capturada no Scheduler, garantindo que o evento não seja excluído
             throw new ErroInternoException("Falha na checagem de fraude", e);
         }
     }

@@ -29,10 +29,10 @@ class ClassificacaoRiscoTest {
                 "OUTROS, 55000.00, NO_INFO"
         })
         void deveRetornarValidadoQuandoCapitalSeguradoEstaNoLimite(final TipoCategoria categoria, final BigDecimal capital, final ClassificacaoRisco risco) {
-            // Quando
+
             final var status = risco.validarCapitalSegurado(categoria, capital);
 
-            // Então
+
             assertEquals(TipoStatus.VALIDADO, status, () -> String.format("Esperava-se VALIDADO para categoria '%s' e capital '%s'", categoria, capital));
         }
 
@@ -47,10 +47,10 @@ class ClassificacaoRiscoTest {
                 "OUTROS, 55000.01, NO_INFO"
         })
         void deveRetornarRejeitadoQuandoCapitalSeguradoExcedeLimite(final TipoCategoria categoria, final BigDecimal capital, final ClassificacaoRisco risco) {
-            // Quando
+
             final var status = risco.validarCapitalSegurado(categoria, capital);
 
-            // Então
+
             assertEquals(TipoStatus.REJEITADO, status, () -> String.format("Esperava-se REJEITADO para categoria '%s' e capital '%s'", categoria, capital));
         }
     }
@@ -67,10 +67,10 @@ class ClassificacaoRiscoTest {
                 "No_Info, NO_INFO"
         })
         void deveRetornarClassificacaoCorretaParaDescricoesValidas(final String descricao, final ClassificacaoRisco riscoEsperado) {
-            // Quando
+
             final var resultado = ClassificacaoRisco.fromString(descricao);
 
-            // Então
+
             assertEquals(riscoEsperado, resultado);
         }
 
@@ -78,10 +78,10 @@ class ClassificacaoRiscoTest {
         @ValueSource(strings = {"NAO_EXISTE", "Risco Preferencial"})
         @NullAndEmptySource
         void deveRetornarNoInfoParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var resultado = ClassificacaoRisco.fromString(descricao);
 
-            // Então
+
             assertEquals(ClassificacaoRisco.NO_INFO, resultado);
         }
     }

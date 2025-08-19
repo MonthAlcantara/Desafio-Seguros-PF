@@ -11,7 +11,7 @@ import io.github.monthalcantara.acme.infrastructure.kafka.event.OrderStatusEvent
 import io.github.monthalcantara.acme.infrastructure.kafka.producer.OrderEventProducer;
 import io.github.monthalcantara.acme.infrastructure.persistence.entity.OutboxEntity;
 import io.github.monthalcantara.acme.infrastructure.persistence.repository.SolicitacaoRepository;
-import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
+import io.github.monthalcantara.acme.util.mapper.SolicitacaoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

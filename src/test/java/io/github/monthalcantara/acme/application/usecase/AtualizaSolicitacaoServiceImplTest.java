@@ -62,10 +62,10 @@ class AtualizaSolicitacaoServiceImplTest {
 
         OutboxEntity outboxEntity = new OutboxEntity();
 
-        // Quando
+
         service.atualizar(solicitacaoId, outboxEntity, response);
 
-        // Então
+
         verify(solicitacaoRepository).save(any(SolicitacaoEntity.class));
         verify(removeOutboxEventService).remover(eq(solicitacaoId), anyString());
         verify(orderEventProducer).send(any());
@@ -79,10 +79,10 @@ class AtualizaSolicitacaoServiceImplTest {
         when(solicitacaoRepository.findById(solicitacaoId)).thenReturn(Optional.of(solicitacaoEntity));
         when(solicitacaoRepository.save(any())).thenReturn(solicitacaoEntity);
 
-        // Quando
+
         service.cancelar(solicitacaoId);
 
-        // Então
+
         assertEquals(TipoStatus.CANCELADA, solicitacaoEntity.getStatus());
         verify(solicitacaoRepository).save(solicitacaoEntity);
         verify(removeOutboxEventService).remover(eq(solicitacaoId), anyString());
@@ -95,18 +95,16 @@ class AtualizaSolicitacaoServiceImplTest {
 
         when(solicitacaoRepository.findById(solicitacaoId)).thenReturn(Optional.empty());
 
-        // Quando e Então & Assert
         assertThrows(SolicitacaoNaoEncontradaException.class, () -> service.cancelar(solicitacaoId));
     }
 
     @Test
     @DisplayName("Deve lançar exceção ao tentar cancelar solicitação com status final")
     void deveLancarExcecaoQuandoStatusFinal() {
-        // Dado
+
         solicitacaoEntity.setAtualizacaoStatusNoHistorico(TipoStatus.APROVADO);
         when(solicitacaoRepository.findById(solicitacaoId)).thenReturn(Optional.of(solicitacaoEntity));
 
-        // Quando e Então & Assert
         assertThrows(StatusNaoPermitidoException.class, () -> service.cancelar(solicitacaoId));
     }
 }

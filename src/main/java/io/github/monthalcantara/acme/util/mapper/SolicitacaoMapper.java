@@ -1,4 +1,4 @@
-package io.github.monthalcantara.acme.util.mapper.mapper;
+package io.github.monthalcantara.acme.util.mapper;
 
 import io.github.monthalcantara.acme.infrastructure.web.dto.request.SolicitacaoRequest;
 import io.github.monthalcantara.acme.infrastructure.web.dto.response.HistoricoMovimentacaoResponse;

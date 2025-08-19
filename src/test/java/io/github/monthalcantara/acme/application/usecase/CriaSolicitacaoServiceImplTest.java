@@ -8,7 +8,7 @@ import io.github.monthalcantara.acme.infrastructure.persistence.entity.OutboxEnt
 import io.github.monthalcantara.acme.infrastructure.persistence.entity.SolicitacaoEntity;
 import io.github.monthalcantara.acme.infrastructure.persistence.repository.OutboxRepository;
 import io.github.monthalcantara.acme.infrastructure.persistence.repository.SolicitacaoRepository;
-import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
+import io.github.monthalcantara.acme.util.mapper.SolicitacaoMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ class CriaSolicitacaoServiceImplTest {
     @Test
     @DisplayName("Deve criar uma nova solicitação com sucesso")
     void deveCriarUmaNovaSolicitacaoComSucesso() throws Exception {
-        // Cenário
+
         String chaveIdempotencia = UUID.randomUUID().toString();
         Solicitacao solicitacao = Solicitacao.builder()
                 .status(TipoStatus.RECEBIDO.getDescricao())
@@ -51,16 +51,16 @@ class CriaSolicitacaoServiceImplTest {
 
         SolicitacaoEntity solicitacaoSalva = SolicitacaoMapper.toEntity(solicitacao);
         solicitacaoSalva.setId(UUID.randomUUID());
-        solicitacaoSalva.setStatus(TipoStatus.RECEBIDO); // evita NPE
+        solicitacaoSalva.setStatus(TipoStatus.RECEBIDO);
 
         when(solicitacaoRepository.findByChaveIdempotencia(chaveIdempotencia)).thenReturn(Optional.empty());
         when(solicitacaoRepository.save(any(SolicitacaoEntity.class))).thenReturn(solicitacaoSalva);
         when(objectMapper.writeValueAsString(any())).thenReturn("{}");
 
-        // Ação
+
         Solicitacao resultado = criaSolicitacaoService.criar(solicitacao, chaveIdempotencia);
 
-        // Verificação
+
         assertNotNull(resultado);
         assertNotNull(resultado.getId());
         verify(solicitacaoRepository, times(1)).save(any(SolicitacaoEntity.class));
@@ -72,7 +72,7 @@ class CriaSolicitacaoServiceImplTest {
     @Test
     @DisplayName("Deve retornar uma solicitação existente se a chave de idempotência já existir")
     void deveRetornarSolicitacaoExistenteQuandoChaveIdempotenciaJaExistir() {
-        // Cenário
+
         String chaveIdempotencia = UUID.randomUUID().toString();
         Solicitacao solicitacao = Solicitacao.builder().build();
         SolicitacaoEntity solicitacaoExistente = SolicitacaoMapper.toEntity(solicitacao);
@@ -81,10 +81,10 @@ class CriaSolicitacaoServiceImplTest {
 
         when(solicitacaoRepository.findByChaveIdempotencia(chaveIdempotencia)).thenReturn(Optional.of(solicitacaoExistente));
 
-        // Ação
+
         Solicitacao resultado = criaSolicitacaoService.criar(solicitacao, chaveIdempotencia);
 
-        // Verificação
+
         assertNotNull(resultado);
         assertNotNull(resultado.getId());
         verify(solicitacaoRepository, times(0)).save(any(SolicitacaoEntity.class));

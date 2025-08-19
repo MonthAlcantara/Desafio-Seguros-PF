@@ -57,15 +57,15 @@ class FraudCheckSchedulerIT {
         );
         outboxRepository.save(outbox);
 
-        String payloadResponse = TestUtils.lerPayloadDoArquivo("fraud-solicitacao-valida.json");
-        // ✅ usa o objectMapper injetado pelo Spring
+        String payloadResponse = TestUtils.lerPayloadDoArquivo("/fraude/fraud-solicitacao-valida.json");
+
         FraudCheckResponse response = objectMapper.readValue(payloadResponse, FraudCheckResponse.class);
         when(fraudClient.checkFraud(any())).thenReturn(response);
 
-        // Quando
+
         scheduler.processOutboxForFraudCheck();
 
-        // Então
+
         verify(fraudClient, times(1)).checkFraud(any(Solicitacao.class));
         verify(atualizaSolicitacaoService, times(1)).atualizar(eq(solicitacao.getId()), any(), any());
     }

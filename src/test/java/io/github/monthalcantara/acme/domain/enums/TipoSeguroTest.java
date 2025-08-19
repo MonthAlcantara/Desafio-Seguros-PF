@@ -22,20 +22,20 @@ class TipoSeguroTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (EnumSource)")
         @EnumSource(TipoSeguro.class)
         void deveRetornarTrueParaValoresEnumValidos(final TipoSeguro tipoSeguro) {
-            // Quando
+
             final var isValida = TipoSeguro.isDescricaoValida(tipoSeguro.getDescricao());
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", tipoSeguro.getDescricao()));
         }
 
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (ValueSource)")
         @ValueSource(strings = {"seguro de vida", "seguro de automóvel", "outros seguros"})
         void deveRetornarTrueParaDescricoesComCaseInsensitive(final String descricao) {
-            // Quando
+
             final var isValida = TipoSeguro.isDescricaoValida(descricao);
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", descricao));
         }
 
@@ -43,10 +43,10 @@ class TipoSeguroTest {
         @ValueSource(strings = {"SEGURO_INVALIDO", "Seguro Automovel", "seguro inválido"})
         @NullAndEmptySource
         void deveRetornarFalseParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var isValida = TipoSeguro.isDescricaoValida(descricao);
 
-            // Então
+
             assertFalse(isValida, () -> String.format("A descrição '%s' deveria ser inválida", descricao));
         }
     }
@@ -58,20 +58,20 @@ class TipoSeguroTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve retornar o tipo de seguro {1}")
         @ValueSource(strings = {"Seguro Residencial", "seguro residencial", "Seguro Residencial"})
         void deveRetornarSeguroCorretoParaDescricoesValidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoSeguro.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(TipoSeguro.RESIDENCIAL, resultado, () -> String.format("Esperava-se 'RESIDENCIAL' mas retornou '%s'", resultado));
         }
 
         @ParameterizedTest(name = "A descrição ''{0}'' deve retornar o tipo de seguro OUTROS")
         @ValueSource(strings = {"outros seguros", "Outros Seguros"})
         void deveRetornarTipoOutrosParaDescricoesValidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoSeguro.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(TipoSeguro.OUTROS, resultado, () -> String.format("Esperava-se 'OUTROS' mas retornou '%s'", resultado));
         }
 
@@ -80,10 +80,10 @@ class TipoSeguroTest {
         @ValueSource(strings = {"SEGURO INEXISTENTE", "seguro_invalido"})
         @NullAndEmptySource
         void deveRetornarNuloParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoSeguro.fromDescricao(descricao);
 
-            // Então
+
             assertNull(resultado, () -> String.format("Esperava-se nulo para a descrição '%s'", resultado));
         }
     }

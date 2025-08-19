@@ -22,20 +22,20 @@ class TipoMetodoPagamentoTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (EnumSource)")
         @EnumSource(TipoMetodoPagamento.class)
         void deveRetornarTrueParaValoresEnumValidos(final TipoMetodoPagamento metodoPagamento) {
-            // Quando
+
             final var isValida = TipoMetodoPagamento.isDescricaoValida(metodoPagamento.getDescricao());
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", metodoPagamento.getDescricao()));
         }
 
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (ValueSource)")
         @ValueSource(strings = {"cartao_credito", "boleto", "Pix"})
         void deveRetornarTrueParaDescricoesComCaseInsensitive(final String descricao) {
-            // Quando
+
             final var isValida = TipoMetodoPagamento.isDescricaoValida(descricao);
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", descricao));
         }
 
@@ -43,10 +43,10 @@ class TipoMetodoPagamentoTest {
         @ValueSource(strings = {"METODO_INVALIDO", "cartão de débito"})
         @NullAndEmptySource
         void deveRetornarFalseParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var isValida = TipoMetodoPagamento.isDescricaoValida(descricao);
 
-            // Então
+
             assertFalse(isValida, () -> String.format("A descrição '%s' deveria ser inválida", descricao));
         }
     }
@@ -58,10 +58,10 @@ class TipoMetodoPagamentoTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve retornar o método {1}")
         @ValueSource(strings = {"PIX", "pix", "PiX"})
         void deveRetornarMetodoCorretoParaDescricoesValidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoMetodoPagamento.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(TipoMetodoPagamento.PIX, resultado, () -> String.format("Esperava-se 'PIX' mas retornou '%s'", resultado));
         }
 
@@ -69,10 +69,10 @@ class TipoMetodoPagamentoTest {
         @ValueSource(strings = {"METODO_INEXISTENTE", "transferencia bancaria"})
         @NullAndEmptySource
         void deveRetornarNuloParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoMetodoPagamento.fromDescricao(descricao);
 
-            // Então
+
             assertNull(resultado, () -> String.format("Esperava-se nulo para a descrição '%s'", descricao));
         }
     }

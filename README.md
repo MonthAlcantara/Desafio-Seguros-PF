@@ -65,7 +65,7 @@ docker-compose up -d
 
 ```bash
 curl -X POST http://localhost:8080/acme/v1/propostas \
-  -H 'Content-Type: application/json' \
+  -H 'Content-Type: application/eventos' \
   -H 'x-idempotency-key: 1a75c2d6-effd-445d-aa0d-737ef5a0d703' \
   -d '{
     "customerId": "c27461c4-8d50-4a31-a4a3-25e98f003c88",

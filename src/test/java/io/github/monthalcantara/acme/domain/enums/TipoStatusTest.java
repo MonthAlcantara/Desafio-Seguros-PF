@@ -22,20 +22,20 @@ class TipoStatusTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (EnumSource)")
         @EnumSource(TipoStatus.class)
         void deveRetornarTrueParaValoresEnumValidos(final TipoStatus status) {
-            // Quando
+
             final var isValida = TipoStatus.isDescricaoValida(status.getDescricao());
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", status.getDescricao()));
         }
 
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (ValueSource)")
         @ValueSource(strings = {"recebido", "rejeitado", "aprovado"})
         void deveRetornarTrueParaDescricoesComCaseInsensitive(final String descricao) {
-            // Quando
+
             final var isValida = TipoStatus.isDescricaoValida(descricao);
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", descricao));
         }
 
@@ -43,10 +43,10 @@ class TipoStatusTest {
         @ValueSource(strings = {"STATUS_INVALIDO", "pendente_aprovacao"})
         @NullAndEmptySource
         void deveRetornarFalseParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var isValida = TipoStatus.isDescricaoValida(descricao);
 
-            // Então
+
             assertFalse(isValida, () -> String.format("A descrição '%s' deveria ser inválida", descricao));
         }
     }
@@ -58,10 +58,10 @@ class TipoStatusTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve retornar o status {1}")
         @ValueSource(strings = {"APROVADO", "aprovado", "aPrOvAdO"})
         void deveRetornarStatusCorretoParaDescricoesValidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoStatus.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(TipoStatus.APROVADO, resultado, () -> String.format("Esperava-se 'APROVADO' mas retornou '%s'", resultado));
         }
 
@@ -69,10 +69,10 @@ class TipoStatusTest {
         @ValueSource(strings = {"STATUS_INEXISTENTE", "Em analise"})
         @NullAndEmptySource
         void deveRetornarNuloParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoStatus.fromDescricao(descricao);
 
-            // Então
+
             assertNull(resultado, () -> String.format("Esperava-se nulo para a descrição '%s'", descricao));
         }
     }

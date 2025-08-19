@@ -5,7 +5,7 @@ import io.github.monthalcantara.acme.infrastructure.web.dto.response.Solicitacao
 import io.github.monthalcantara.acme.domain.service.CriaSolicitacaoService;
 import io.github.monthalcantara.acme.util.validator.SolicitacaoRequestValidator;
 import io.github.monthalcantara.acme.exception.ErrorResponse;
-import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
+import io.github.monthalcantara.acme.util.mapper.SolicitacaoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 @Slf4j
 @RestController
 @RequestMapping("/v1/propostas")

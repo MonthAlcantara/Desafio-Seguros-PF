@@ -22,20 +22,20 @@ class TipoClienteTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (EnumSource)")
         @EnumSource(TipoCliente.class)
         void deveRetornarTrueParaValoresEnumValidos(final TipoCliente tipoCliente) {
-            // Quando
+
             final var isValida = TipoCliente.isDescricaoValida(tipoCliente.getDescricao());
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", tipoCliente.getDescricao()));
         }
 
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida (ValueSource)")
         @ValueSource(strings = {"cliente_regular", "CLIENTE_PREFERENCIAL"})
         void deveRetornarTrueParaDescricoesComCaseInsensitive(final String descricao) {
-            // Quando
+
             final var isValida = TipoCliente.isDescricaoValida(descricao);
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", descricao));
         }
 
@@ -43,10 +43,10 @@ class TipoClienteTest {
         @ValueSource(strings = {"cliente_invalido", "cliente-regular", "cliente regular"})
         @NullAndEmptySource
         void deveRetornarFalseParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var isValida = TipoCliente.isDescricaoValida(descricao);
 
-            // Então
+
             assertFalse(isValida, () -> String.format("A descrição '%s' deveria ser inválida", descricao));
         }
     }
@@ -58,10 +58,10 @@ class TipoClienteTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve retornar o tipo {1}")
         @ValueSource(strings = {"cliente_auto_risco", "CLIENTE_AUTO_RISCO"})
         void deveRetornarTipoCorretoParaDescricoesValidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoCliente.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(TipoCliente.AUTO_RISCO, resultado, () -> String.format("Esperava-se 'AUTO_RISCO' mas retornou '%s'", resultado));
         }
 
@@ -69,10 +69,10 @@ class TipoClienteTest {
         @ValueSource(strings = {"cliente inexistente", "auto risco"})
         @NullAndEmptySource
         void deveRetornarNuloParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var resultado = TipoCliente.fromDescricao(descricao);
 
-            // Então
+
             assertNull(resultado, () -> String.format("Esperava-se nulo para a descrição '%s'", resultado));
         }
     }

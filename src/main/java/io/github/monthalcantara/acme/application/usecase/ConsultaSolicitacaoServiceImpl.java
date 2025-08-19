@@ -4,7 +4,7 @@ import io.github.monthalcantara.acme.domain.service.ConsultaSolicitacaoService;
 import io.github.monthalcantara.acme.domain.model.Solicitacao;
 import io.github.monthalcantara.acme.exception.SolicitacaoNaoEncontradaException;
 import io.github.monthalcantara.acme.infrastructure.persistence.repository.SolicitacaoRepository;
-import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
+import io.github.monthalcantara.acme.util.mapper.SolicitacaoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

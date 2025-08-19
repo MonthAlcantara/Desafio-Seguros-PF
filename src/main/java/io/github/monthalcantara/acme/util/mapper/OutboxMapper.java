@@ -1,4 +1,4 @@
-package io.github.monthalcantara.acme.util.mapper.mapper;
+package io.github.monthalcantara.acme.util.mapper;
 
 import io.github.monthalcantara.acme.domain.model.Outbox;
 import io.github.monthalcantara.acme.infrastructure.persistence.entity.OutboxEntity;

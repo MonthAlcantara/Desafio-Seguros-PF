@@ -19,10 +19,10 @@ class ClassificacaoFraudeTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve ser válida")
         @EnumSource(ClassificacaoFraude.class)
         void deveRetornarTrueParaDescricoesValidas(final ClassificacaoFraude classificacao) {
-            // Quando
+
             final var isValida = ClassificacaoFraude.isDescricaoValida(classificacao.getDescricao());
 
-            // Então
+
             assertTrue(isValida, () -> String.format("A descrição '%s' deveria ser válida", classificacao.getDescricao()));
         }
 
@@ -30,10 +30,10 @@ class ClassificacaoFraudeTest {
         @ValueSource(strings = {"FRAUDE_INVALIDA", "RISCO_ALTO", "HIGH RISK"})
         @NullAndEmptySource
         void deveRetornarFalseParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var isValida = ClassificacaoFraude.isDescricaoValida(descricao);
 
-            // Então
+
             assertFalse(isValida, () -> String.format("A descrição '%s' deveria ser inválida", descricao));
         }
     }
@@ -45,13 +45,13 @@ class ClassificacaoFraudeTest {
         @ParameterizedTest(name = "A descrição ''{0}'' deve retornar a classificação {1}")
         @EnumSource(ClassificacaoFraude.class)
         void deveRetornarClassificacaoCorretaParaDescricoesValidas(final ClassificacaoFraude classificacao) {
-            // Dado
+
             final var descricao = classificacao.getDescricao();
 
-            // Quando
+
             final var resultado = ClassificacaoFraude.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(classificacao, resultado, () -> String.format("Esperava-se '%s' mas retornou '%s'", classificacao, resultado));
         }
 
@@ -59,10 +59,10 @@ class ClassificacaoFraudeTest {
         @ValueSource(strings = {"FRAUDE_INEXISTENTE", "Risco Regular", "NO-INFO"})
         @NullAndEmptySource
         void deveRetornarUnknownParaDescricoesInvalidas(final String descricao) {
-            // Quando
+
             final var resultado = ClassificacaoFraude.fromDescricao(descricao);
 
-            // Então
+
             assertEquals(ClassificacaoFraude.UNKNOWN, resultado,
                     () -> String.format("Esperava-se UNKNOWN para a descrição '%s'", descricao));
         }

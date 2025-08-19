@@ -30,7 +30,7 @@ class OrderEventConsumerIT {
     @Test
     @DisplayName("Deve consumir evento de pagamento e chamar service")
     void deveConsumirEventoPagamento() throws Exception {
-        var event = TestUtils.lerPayloadDoArquivo("/json/payments-events/pagamento-aprovado.json");
+        var event = TestUtils.lerPayloadDoArquivo("/eventos/payments-events/pagamento-aprovado.json");
         PaymentEvent paymentEvent = objectMapper.readValue(event, PaymentEvent.class);
 
         consumer.consumePaymentEvent(paymentEvent);
@@ -42,7 +42,7 @@ class OrderEventConsumerIT {
     @Test
     @DisplayName("Deve consumir evento de subscrição e chamar service")
     void deveConsumirEventoSubscricao() throws Exception {
-        var event = TestUtils.lerPayloadDoArquivo("/json/subscriptions-events/subscricao-aprovado.json");
+        var event = TestUtils.lerPayloadDoArquivo("/eventos/subscriptions-events/subscricao-aprovado.json");
         SubscriptionEvent subscriptionEvent = objectMapper.readValue(event, SubscriptionEvent.class);
 
         consumer.consumeSubscriptionEvent(subscriptionEvent);

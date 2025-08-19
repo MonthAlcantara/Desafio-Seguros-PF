@@ -3,7 +3,7 @@ package io.github.monthalcantara.acme.infrastructure.web;
 import io.github.monthalcantara.acme.infrastructure.web.dto.response.SolicitacaoResponse;
 import io.github.monthalcantara.acme.domain.service.ConsultaSolicitacaoService;
 import io.github.monthalcantara.acme.exception.ErrorResponse;
-import io.github.monthalcantara.acme.util.mapper.mapper.SolicitacaoMapper;
+import io.github.monthalcantara.acme.util.mapper.SolicitacaoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

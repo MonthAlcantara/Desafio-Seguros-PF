@@ -53,10 +53,9 @@ class SolicitacaoRequestValidatorTest {
         @Test
         @DisplayName("Deve validar a requisição quando todos os campos são válidos")
         void deveValidarComCamposValidos() {
-            // Dado
+
             final var request = criarPayloadValido();
 
-            // Quando e Então
             assertDoesNotThrow(() -> validator.validar(request),
                     "Não deveria lançar exceção para uma requisição válida");
         }
@@ -71,7 +70,7 @@ class SolicitacaoRequestValidatorTest {
         @DisplayName("Deve lançar ValidacaoNegocioException para campos inválidos")
         void deveLancarExcecaoParaCamposInvalidos(
                 final String categoria, final String canalVenda, final String metodoPagamento, final List<String> errosEsperados) {
-            // Dado
+
             final var requestInvalido = new SolicitacaoRequest(
                     UUID.randomUUID(),
                     UUID.randomUUID(),
@@ -84,7 +83,6 @@ class SolicitacaoRequestValidatorTest {
                     null
             );
 
-            // Quando e Então
             final var exception = assertThrows(ValidacaoNegocioException.class, () -> validator.validar(requestInvalido));
 
             assertEquals(errosEsperados.size(), exception.getErros().size(),
